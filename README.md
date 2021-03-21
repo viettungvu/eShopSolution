@@ -6,5 +6,8 @@
 - Microsoft.EntityFrameworkCore.SqlServer
 - Microsoft.EntityFrameworkCore.Tool
 - Microsoft.EntityFrameworkCore.Design
+- Microsoft.EntityFramework.Relational
+- Microsoft.EntityFramework.FileExtension
+- Microsoft.EntityFramework.Json
 ##How to configure and run
 ##How to contribute

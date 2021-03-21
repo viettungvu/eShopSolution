@@ -10,8 +10,8 @@ using eShopSolution.Data.EF;
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    [Migration("20210321100633_Init_MigrationDb")]
-    partial class Init_MigrationDb
+    [Migration("20210321123732_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -116,6 +116,8 @@ namespace eShopSolution.Data.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("LanguageId");
 
@@ -302,7 +304,7 @@ namespace eShopSolution.Data.Migrations
 
             modelBuilder.Entity("eShopSolution.Data.Entites.ProductTranslation", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -313,14 +315,14 @@ namespace eShopSolution.Data.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("LanguageId")
                         .HasColumnType("varchar(5)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SeoAlias")
                         .HasColumnType("nvarchar(max)");
@@ -331,9 +333,11 @@ namespace eShopSolution.Data.Migrations
                     b.Property<string>("SeoTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
                     b.HasIndex("LanguageId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductTranslations");
                 });
@@ -416,11 +420,19 @@ namespace eShopSolution.Data.Migrations
 
             modelBuilder.Entity("eShopSolution.Data.Entites.CategoryTranslation", b =>
                 {
+                    b.HasOne("eShopSolution.Data.Entites.Category", "Category")
+                        .WithMany("CategoryTranslations")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("eShopSolution.Data.Entites.Language", "Language")
                         .WithMany("CategoryTranslations")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Language");
                 });
@@ -488,7 +500,15 @@ namespace eShopSolution.Data.Migrations
                         .WithMany("ProductTranslations")
                         .HasForeignKey("LanguageId");
 
+                    b.HasOne("eShopSolution.Data.Entites.Product", "Product")
+                        .WithMany("ProductTranslations")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Language");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("eShopSolution.Data.Entites.Cart", b =>
@@ -498,6 +518,8 @@ namespace eShopSolution.Data.Migrations
 
             modelBuilder.Entity("eShopSolution.Data.Entites.Category", b =>
                 {
+                    b.Navigation("CategoryTranslations");
+
                     b.Navigation("ProductInCategories");
                 });
 
@@ -520,6 +542,8 @@ namespace eShopSolution.Data.Migrations
                     b.Navigation("ProductInCarts");
 
                     b.Navigation("ProductInCategories");
+
+                    b.Navigation("ProductTranslations");
                 });
 #pragma warning restore 612, 618
         }
