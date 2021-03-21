@@ -26,7 +26,9 @@ namespace eShopSolution.Data.Configurations
             builder.HasOne(e => e.Language)
                 .WithMany(e => e.CategoryTranslations)
                 .HasForeignKey(e => e.LanguageId);
-
+            builder.HasOne(e => e.Category)
+                .WithMany(e => e.CategoryTranslations)
+                .HasForeignKey(e => e.CategoryId);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace eShopSolution.Data.Entites
         public bool IsShowOnHome { get; set; }
         public Status Status { get; set; }
 
-
+        public List<CategoryTranslation> CategoryTranslations { get; set; }
         public List<ProductInCategory> ProductInCategories { get; set; }
     }
 }
