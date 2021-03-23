@@ -9,5 +9,5 @@
 - Microsoft.EntityFramework.Relational
 - Microsoft.EntityFramework.FileExtension
 - Microsoft.EntityFramework.Json
-##How to configure and run
-##How to contribute
+## How to configure and run
+## How to contribute
