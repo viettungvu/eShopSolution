@@ -54,6 +54,8 @@ namespace eShopSolution.Data.EF
 
             modelBuilder.SeedData();
         }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<AppRole> AppRoles { get; set; }
         public virtual DbSet<AppConfig> AppConfigs { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }

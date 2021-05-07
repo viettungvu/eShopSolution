@@ -3,16 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopSolution.WebApp", "eShopSolution.WebApp\eShopSolution.WebApp.csproj", "{18E29E6C-E886-4BA6-A6F8-CC368D3F3E1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.WebApp", "eShopSolution.WebApp\eShopSolution.WebApp.csproj", "{18E29E6C-E886-4BA6-A6F8-CC368D3F3E1A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F7819D2-F484-49B3-B60C-493EBBEA6F98}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopSolution.Data", "eShopSolution.Data\eShopSolution.Data.csproj", "{354B6600-6656-4ACA-A7E5-579DFC1EFE66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.Data", "eShopSolution.Data\eShopSolution.Data.csproj", "{354B6600-6656-4ACA-A7E5-579DFC1EFE66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopSolution.Application", "eShopSolution.Application\eShopSolution.Application.csproj", "{45F0B355-B1F4-430F-B7BC-D79CCF9AD2A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.Application", "eShopSolution.Application\eShopSolution.Application.csproj", "{45F0B355-B1F4-430F-B7BC-D79CCF9AD2A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopSolution.Ultilities", "eShopSolution.Ultilities\eShopSolution.Ultilities.csproj", "{741CE14F-821D-474B-9F29-F04F2AE03A66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{45F0B355-B1F4-430F-B7BC-D79CCF9AD2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45F0B355-B1F4-430F-B7BC-D79CCF9AD2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45F0B355-B1F4-430F-B7BC-D79CCF9AD2A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{741CE14F-821D-474B-9F29-F04F2AE03A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{741CE14F-821D-474B-9F29-F04F2AE03A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{741CE14F-821D-474B-9F29-F04F2AE03A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{741CE14F-821D-474B-9F29-F04F2AE03A66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
