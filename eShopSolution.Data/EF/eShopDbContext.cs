@@ -50,7 +50,7 @@ namespace eShopSolution.Data.EF
             modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims").HasKey(e=>e.RoleId);
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(e=>e.UserId);
 
-
+            modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
 
             modelBuilder.SeedData();
         }
@@ -70,5 +70,6 @@ namespace eShopSolution.Data.EF
         public virtual DbSet<ProductTranslation> ProductTranslations { get; set; }
         public virtual DbSet<Promotion> Promotions { get; set; }
         public virtual DbSet<Contact> Transactions { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
     }
 }
