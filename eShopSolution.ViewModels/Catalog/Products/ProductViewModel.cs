@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShopSolution.Application.Catalog.Products.Dtos
+namespace eShopSolution.ViewModels.Catalog.Products
 {
     public class ProductViewModel
     {
@@ -19,5 +20,6 @@ namespace eShopSolution.Application.Catalog.Products.Dtos
         public int Stock { get; set; }
         public int ViewCount { get; set; }
         public DateTime DateCreated { get; set; }
+        public string ThumbnailImage { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eShopSolution.Data.EF;
 
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    partial class EShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210507092817_AddImageTable")]
+    partial class AddImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,7 +178,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
-                            ConcurrencyStamp = "c9c82bb5-443d-4b43-8273-db7e28f5b095",
+                            ConcurrencyStamp = "eae498ea-cf40-4028-b414-06dea39f7913",
                             Name = "admin",
                             NormalizedName = "admin"
                         });
@@ -252,8 +254,8 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5a254331-c2bc-4a40-a3b2-f581f91842ef",
-                            DoB = new DateTime(2021, 5, 9, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "941d73ba-9d62-448f-8086-8e36ab50287d",
+                            DoB = new DateTime(2021, 5, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             Email = "viettungtvhd@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Vu Viet",
@@ -261,7 +263,7 @@ namespace eShopSolution.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "viettungtvhd@gmail.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL1qLdc41B0WD9T7jTuMSaIPJDbgZstuuDzJQm5CKDjF0EKUpev7mwFu8F7h0BFu5A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGV05cdKCJiKFj58beyTl3qPdsNEKop/kSncLCn3m+9ukWCoXtS6EP/djpObfDihbQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -579,7 +581,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 5, 9, 18, 35, 22, 930, DateTimeKind.Local).AddTicks(8147),
+                            DateCreated = new DateTime(2021, 5, 7, 16, 28, 16, 127, DateTimeKind.Local).AddTicks(8704),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -603,8 +605,8 @@ namespace eShopSolution.Data.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
+                    b.Property<int>("FileSize")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
