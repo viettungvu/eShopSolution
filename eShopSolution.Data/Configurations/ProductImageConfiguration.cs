@@ -11,7 +11,7 @@ namespace eShopSolution.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
-            builder.ToTable("Images");
+            builder.ToTable("ProductImages");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.Path).HasMaxLength(255).IsRequired();

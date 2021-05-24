@@ -11,6 +11,7 @@ namespace eShopSolution.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductTranslation> builder)
         {
+            //builder.HasKey(e => new { e.ProductId, e.LanguageId });
             builder.HasKey(e => e.Id);
             builder.HasOne(e => e.Language)
                 .WithMany(e => e.ProductTranslations)

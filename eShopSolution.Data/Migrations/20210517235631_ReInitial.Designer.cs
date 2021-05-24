@@ -10,8 +10,8 @@ using eShopSolution.Data.EF;
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    [Migration("20210321123958_Seed")]
-    partial class Seed
+    [Migration("20210517235631_ReInitial")]
+    partial class ReInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,106 @@ namespace eShopSolution.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("AppRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("AppUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("AppUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.ToTable("AppUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
+                            UserId = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575")
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("AppUserTokens");
+                });
 
             modelBuilder.Entity("eShopSolution.Data.Entites.AppConfig", b =>
                 {
@@ -48,6 +148,126 @@ namespace eShopSolution.Data.Migrations
                         {
                             Key = "HomeDescription",
                             Value = "This is description of eShopSolution"
+                        });
+                });
+
+            modelBuilder.Entity("eShopSolution.Data.Entites.AppRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
+                            ConcurrencyStamp = "d33190c8-94f9-4acc-985f-d65577cd3f9f",
+                            Name = "admin",
+                            NormalizedName = "admin"
+                        });
+                });
+
+            modelBuilder.Entity("eShopSolution.Data.Entites.AppUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DoB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a18be9c0-aa65-4af8-bd17-00bd9344e575"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "50212911-f616-4a2e-a1d4-da4413496a49",
+                            DoB = new DateTime(2021, 5, 18, 0, 0, 0, 0, DateTimeKind.Local),
+                            Email = "vi-Viettungtvhd@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Vu vi-Viet",
+                            LastName = "Tung",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "vi-Viettungtvhd@gmail.com",
+                            NormalizedUserName = "admin",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOsIVtA3gzMxXXMaHl4cVb8kpLFQxlVSvWUU63GrEi7BfJo5hCLPJgbAG7YLpMixig==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
                         });
                 });
 
@@ -111,6 +331,20 @@ namespace eShopSolution.Data.Migrations
                             IsShowOnHome = true,
                             SortOrder = 2,
                             Status = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsShowOnHome = true,
+                            SortOrder = 1,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsShowOnHome = true,
+                            SortOrder = 2,
+                            Status = 1
                         });
                 });
 
@@ -161,41 +395,71 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            LanguageId = "vi",
-                            Name = "Áo nam",
-                            SeoAlias = "ao-nam",
-                            SeoDescription = "Sản phẩm áo thời trang nam",
-                            SeoTitle = "Sản phẩm áo thời trang nam"
+                            LanguageId = "vi-Vi",
+                            Name = "Danh mục 1",
+                            SeoAlias = "Danh mục 1",
+                            SeoDescription = "Danh mục 1",
+                            SeoTitle = "Danh mục 1"
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
-                            LanguageId = "en",
-                            Name = "Men Shirt",
-                            SeoAlias = "men-shirt",
-                            SeoDescription = "The shirt products for men",
-                            SeoTitle = "The shirt products for men"
+                            LanguageId = "en-US",
+                            Name = "Category 1",
+                            SeoAlias = "Category 1",
+                            SeoDescription = "Category 1",
+                            SeoTitle = "Category 1"
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 2,
-                            LanguageId = "vi",
-                            Name = "Áo nữ",
-                            SeoAlias = "ao-nu",
-                            SeoDescription = "Sản phẩm áo thời trang nữ",
-                            SeoTitle = "Sản phẩm áo thời trang women"
+                            LanguageId = "vi-Vi",
+                            Name = "Danh mục 2",
+                            SeoAlias = "Danh mục 2",
+                            SeoDescription = "Danh mục 2",
+                            SeoTitle = "Danh mục 2"
                         },
                         new
                         {
                             Id = 4,
                             CategoryId = 2,
-                            LanguageId = "en",
-                            Name = "Women Shirt",
-                            SeoAlias = "women-shirt",
-                            SeoDescription = "The shirt products for women",
-                            SeoTitle = "The shirt products for women"
+                            LanguageId = "en-US",
+                            Name = "Category 2",
+                            SeoAlias = "Category 2",
+                            SeoDescription = "Category 2",
+                            SeoTitle = "Category 2"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 3,
+                            LanguageId = "vi-Vi",
+                            Name = "Danh mục 3",
+                            SeoAlias = "Danh mục 3",
+                            SeoDescription = "Danh mục 2",
+                            SeoTitle = "Danh mục 3"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 4,
+                            LanguageId = "en-US",
+                            Name = "Category 3",
+                            SeoAlias = "Category 3",
+                            SeoDescription = "Category 3",
+                            SeoTitle = "Category 3"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 4,
+                            LanguageId = "vi-Vi",
+                            Name = "Danh mục 4",
+                            SeoAlias = "Danh mục 4",
+                            SeoDescription = "Danh mục 4",
+                            SeoTitle = "Danh mục 4"
                         });
                 });
 
@@ -255,13 +519,13 @@ namespace eShopSolution.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "vi",
+                            Id = "vi-Vi",
                             IsDefault = true,
-                            Name = "Vietnam"
+                            Name = "vi-Vietnam"
                         },
                         new
                         {
-                            Id = "en",
+                            Id = "en-US",
                             IsDefault = false,
                             Name = "English"
                         });
@@ -343,9 +607,6 @@ namespace eShopSolution.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("SeoAlias")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Stock")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -364,12 +625,70 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2021, 3, 21, 19, 39, 58, 218, DateTimeKind.Local).AddTicks(5273),
+                            DateCreated = new DateTime(2021, 5, 18, 6, 56, 30, 515, DateTimeKind.Local).AddTicks(698),
+                            OriginalPrice = 100000m,
+                            Price = 200000m,
+                            Stock = 0,
+                            ViewCount = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateCreated = new DateTime(2021, 5, 18, 6, 56, 30, 516, DateTimeKind.Local).AddTicks(8276),
+                            OriginalPrice = 100000m,
+                            Price = 200000m,
+                            Stock = 0,
+                            ViewCount = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateCreated = new DateTime(2021, 5, 18, 6, 56, 30, 516, DateTimeKind.Local).AddTicks(8350),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
                             ViewCount = 0
                         });
+                });
+
+            modelBuilder.Entity("eShopSolution.Data.Entites.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("eShopSolution.Data.Entites.ProductInCart", b =>
@@ -405,6 +724,31 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             ProductID = 1,
+                            CategoryID = 1
+                        },
+                        new
+                        {
+                            ProductID = 1,
+                            CategoryID = 2
+                        },
+                        new
+                        {
+                            ProductID = 2,
+                            CategoryID = 1
+                        },
+                        new
+                        {
+                            ProductID = 2,
+                            CategoryID = 3
+                        },
+                        new
+                        {
+                            ProductID = 2,
+                            CategoryID = 2
+                        },
+                        new
+                        {
+                            ProductID = 3,
                             CategoryID = 1
                         });
                 });
@@ -452,26 +796,74 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Áo sơ mi nam trắng Việt Tiến",
-                            Details = "Áo sơ mi nam trắng Việt Tiến",
-                            LanguageId = "vi",
-                            Name = "Áo sơ mi nam trắng Việt Tiến",
+                            Description = "San pham 1",
+                            Details = "San pham 1",
+                            LanguageId = "vi-Vi",
+                            Name = "Sản phẩm 1",
                             ProductId = 1,
-                            SeoAlias = "ao-so-mi-nam-trang-viet-tien",
-                            SeoDescription = "Áo sơ mi nam trắng Việt Tiến",
-                            SeoTitle = "Áo sơ mi nam trắng Việt Tiến"
+                            SeoAlias = "san-pham-1",
+                            SeoDescription = "San pham 1",
+                            SeoTitle = "San pham 1"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Viet Tien Men T-Shirt",
-                            Details = "Viet Tien Men T-Shirt",
-                            LanguageId = "en",
-                            Name = "Viet Tien Men T-Shirt",
+                            Description = "Product 1",
+                            Details = "Product 1",
+                            LanguageId = "en-US",
+                            Name = "Product 1",
                             ProductId = 1,
-                            SeoAlias = "viet-tien-men-t-shirt",
-                            SeoDescription = "Viet Tien Men T-Shirt",
-                            SeoTitle = "Viet Tien Men T-Shirt"
+                            SeoAlias = "product-1",
+                            SeoDescription = "Product 1",
+                            SeoTitle = "Product 1"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "San pham 2",
+                            Details = "San pham 2",
+                            LanguageId = "vi-Vi",
+                            Name = "Sản phẩm 2",
+                            ProductId = 2,
+                            SeoAlias = "san-pham-2",
+                            SeoDescription = "San pham 2",
+                            SeoTitle = "San pham 2"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Product 2",
+                            Details = "Product 2",
+                            LanguageId = "en-US",
+                            Name = "Product 2",
+                            ProductId = 2,
+                            SeoAlias = "product-2",
+                            SeoDescription = "Product 2",
+                            SeoTitle = "Product 2"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "San pham 3",
+                            Details = "San pham 3",
+                            LanguageId = "vi-Vi",
+                            Name = "Sản phẩm 3",
+                            ProductId = 3,
+                            SeoAlias = "san-pham-3",
+                            SeoDescription = "San pham 3",
+                            SeoTitle = "San pham 3"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Product 3",
+                            Details = "Product 3",
+                            LanguageId = "en-US",
+                            Name = "Product 3",
+                            ProductId = 3,
+                            SeoAlias = "product-3",
+                            SeoDescription = "Product 3",
+                            SeoTitle = "Product 3"
                         });
                 });
 
@@ -589,6 +981,17 @@ namespace eShopSolution.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("eShopSolution.Data.Entites.ProductImage", b =>
+                {
+                    b.HasOne("eShopSolution.Data.Entites.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("eShopSolution.Data.Entites.ProductInCart", b =>
                 {
                     b.HasOne("eShopSolution.Data.Entites.Cart", "Cart")
@@ -671,6 +1074,8 @@ namespace eShopSolution.Data.Migrations
             modelBuilder.Entity("eShopSolution.Data.Entites.Product", b =>
                 {
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductImages");
 
                     b.Navigation("ProductInCarts");
 
