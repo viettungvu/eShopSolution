@@ -7,7 +7,6 @@ namespace eShopSolution.ViewModels.Catalog.Products
 {
     public class ProductUpdateRequest
     {
-        public int Id { get; set; }
         public string Name { set; get; }
         public string Description { set; get; }
         public string Details { set; get; }
