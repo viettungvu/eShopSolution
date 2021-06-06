@@ -51,7 +51,7 @@ namespace eShopSolution.Data.Extensions
                     OriginalPrice = 100000,
                     Price = 200000,
                     Stock = 0,
-                   ViewCount = 0,
+                    ViewCount = 0,
                 },
                 new Product()
                 {
@@ -89,7 +89,7 @@ namespace eShopSolution.Data.Extensions
                  },
                  new ProductTranslation()
                  {
-                    Id = 3,
+                     Id = 3,
                      ProductId = 2,
                      Name = "Sản phẩm 2",
                      LanguageId = "vi-Vi",
@@ -101,7 +101,7 @@ namespace eShopSolution.Data.Extensions
                  },
                   new ProductTranslation()
                   {
-                     Id = 4,
+                      Id = 4,
                       ProductId = 2,
                       Name = "Product 2",
                       LanguageId = "en-US",
@@ -154,19 +154,18 @@ namespace eShopSolution.Data.Extensions
                 NormalizedName = "admin"
             });
 
-
             var hasher = new PasswordHasher<AppUser>();
             modelBuilder.Entity<AppUser>().HasData(new AppUser
             {
                 Id = new Guid(ADMIN_ID),
                 UserName = "admin",
                 NormalizedUserName = "admin",
-                Email = "vi-Viettungtvhd@gmail.com",
-                NormalizedEmail = "vi-Viettungtvhd@gmail.com",
+                Email = "viettungtvhd@gmail.com",
+                NormalizedEmail = "viettungtvhd@gmail.com",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "123456a"),
+                PasswordHash = hasher.HashPassword(null, "Admin@1234"),
                 SecurityStamp = string.Empty,
-                FirstName = "Vu vi-Viet",
+                FirstName = "Vu Viet",
                 LastName = "Tung",
                 DoB = DateTime.Today
             }); ;
@@ -176,7 +175,6 @@ namespace eShopSolution.Data.Extensions
                 RoleId = new Guid(ROLE_ID),
                 UserId = new Guid(ADMIN_ID)
             });
-
         }
     }
 }
