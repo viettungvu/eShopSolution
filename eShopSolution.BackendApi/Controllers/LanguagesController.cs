@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Application.System.Languages;
 using eShopSolution.ViewModels.System.Languages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LanguagesController : ControllerBase
     {
         private readonly ILanguageService _languageService;

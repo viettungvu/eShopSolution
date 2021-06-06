@@ -17,14 +17,14 @@ namespace eShopSolution.Application.System.Users
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<AppRole> _roleInManager;
+        private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleInManager, IConfiguration config)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleInManager = roleInManager;
+            _roleManager = roleManager;
             _config = config;
         }
 
@@ -33,49 +33,61 @@ namespace eShopSolution.Application.System.Users
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user != null)
             {
-                var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.IsRemember, true);
-                if (!result.Succeeded)
-                    return null;
-                var userRoles = await _userManager.GetRolesAsync(user);
-                var authClaims = new List<Claim>
+                var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, request.IsRemember, true);
+                if (signInResult.Succeeded)
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, string.Join(";", userRoles))
-                };
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
-                var token = new JwtSecurityToken(
-                    issuer: _config["JWT:ValidIssuer"],
-                    audience: _config["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-                return new JwtSecurityTokenHandler().WriteToken(token);
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var authClaims = new List<Claim>() {
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.Role, string.Join(";", roles))
+                    };
+                    var authSignInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+                    var token = new JwtSecurityToken(
+                        issuer: _config["Tokens:Issuer"],
+                        audience: _config["Tokens:Audience"],
+                        expires: DateTime.Now.AddMinutes(1),
+                        claims: authClaims,
+                        signingCredentials: new SigningCredentials(authSignInKey, SecurityAlgorithms.HmacSha256)
+                        );
+                    return new JwtSecurityTokenHandler().WriteToken(token);
+                }
+                return null;
             }
             return null;
         }
 
-        public Task<bool> Login()
+        public Task<int> Delete(string username)
         {
             throw new NotImplementedException();
         }
 
         public async Task<bool> Register(RegisterRequest request)
         {
-            var user = new AppUser()
+            var user = await _userManager.FindByNameAsync(request.Username);
+            if (user != null)
+            {
+                throw new EShopException($"Tài khoản {request.Username} đã tồn tại");
+            }
+            var newUser = new AppUser()
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DoB = request.DoB,
                 Email = request.Email,
                 PhoneNumber = request.Phone,
-                UserName = request.Username
+                UserName = request.Username,
             };
-            var result = await _userManager.CreateAsync(user, request.Password);
+
+            var result = await _userManager.CreateAsync(newUser, request.Password);
             if (result.Succeeded)
                 return true;
             return false;
+        }
+
+        public Task<int> Update(UserUpdateRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

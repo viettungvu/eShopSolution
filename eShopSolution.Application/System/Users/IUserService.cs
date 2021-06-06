@@ -10,8 +10,10 @@ namespace eShopSolution.Application.System.Users
     {
         Task<string> Authenticate(LoginRequest request);
 
-        Task<bool> Login();
-
         Task<bool> Register(RegisterRequest request);
+
+        Task<int> Update(UserUpdateRequest request);
+
+        Task<int> Delete(string username);
     }
 }
