@@ -57,7 +57,7 @@ namespace eShopSolution.BackendApi
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
             //Tự động đăng kí Fluent Validation vào DI cho tất cả validator nằm cũng thư mục với LoginRequestValidator
-            services.AddControllersWithViews().AddFluentValidation(
+            services.AddControllers().AddFluentValidation(
                 fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             //Thêm swagger và header authorization
             services.AddSwaggerGen(c =>
@@ -140,15 +140,15 @@ namespace eShopSolution.BackendApi
 
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eShopSolution v1");
-            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger eShopSolution v1");
             });
         }
     }

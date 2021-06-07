@@ -37,7 +37,7 @@ namespace eShopSolution.BackendApi.Controllers
             var languageId = await _languageService.Create(request);
             if (languageId == null)
                 return BadRequest("Failed");
-            return Ok("Successfull");
+            return Ok();
         }
 
         [HttpDelete("delete")]
@@ -46,7 +46,7 @@ namespace eShopSolution.BackendApi.Controllers
             var result = await _languageService.Delete(languageId);
             if (!result)
                 return BadRequest("Failed");
-            return Ok("Successfull");
+            return Ok();
         }
 
         [HttpPut("update")]
@@ -55,7 +55,7 @@ namespace eShopSolution.BackendApi.Controllers
             var result = await _languageService.Update(request);
             if (!result)
                 return BadRequest("Failed");
-            return Ok("Successfull");
+            return Ok();
         }
     }
 }

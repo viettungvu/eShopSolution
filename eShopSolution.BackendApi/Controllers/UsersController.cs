@@ -23,14 +23,14 @@ namespace eShopSolution.BackendApi.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromForm] LoginRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var resultToken = await _userService.Authenticate(request);
             if (string.IsNullOrEmpty(resultToken))
-                return BadRequest("Tài khoản hoặc mật khẩu không chính xác, dcm mày");
-            return Ok(new { token = resultToken });
+                return BadRequest("Tài khoản hoặc mật khẩu không chính xác");
+            return Ok(resultToken);
         }
 
         [HttpPost("register")]
@@ -42,7 +42,7 @@ namespace eShopSolution.BackendApi.Controllers
             var result = await _userService.Register(request);
             if (!result)
                 return BadRequest("Đăng kí thất bại");
-            return Ok("Đăng kí thành công");
+            return Ok();
         }
     }
 }

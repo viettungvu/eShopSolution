@@ -1,0 +1,151 @@
+:root{
+    --primary-color: #0d6efd;
+    --secondary-color: #8d949a;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --wanrning-color:#ffc107;
+    --info-color: #0dcaf0;
+    --dark-color: #212529;
+    --while-color:#fff;
+    --black-color:#000;
+    --border-color:#d8e3e7;
+    --border1-color:#7868e6;
+    --bg-card-color: #e2e5ec;
+    --bg-card1-color: #f6f8fa;
+    --bg-color:#ffffff;
+    --bg2-color: #fff5fd;
+}
+body{
+    background:var(--bg-color);
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-size: cover;
+    
+}
+.login-form{
+    width: 100%;
+    max-width: 400px;
+    background: var(--bg-card-color);
+    border-radius: 5px;
+    padding: 10px;
+}
+.login-form .form__title{
+    padding-bottom: 20px;
+}
+.login-form .form__title h2{
+    padding-bottom: 4px;
+    text-align: right;
+    text-transform: capitalize;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+}
+form .user-details .input-box{
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: var(--while-color);
+    position: relative;
+    /* box-shadow: 0 4px 12px -4px rgba(0,0,0,0.65); */
+}
+.user-details .input-box>label{
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.user-details .input-box input{
+    outline: none;
+    width: 100%;
+    border-radius: 10px;
+    text-overflow: ellipsis;
+    padding: 8px 30px 8px 8px;
+    border: 2px solid var(--secondary-color);
+}
+
+.user-details .input-box>input:focus{
+    border-color: var(--wanrning-color);
+}
+.user-details .input-box.success input{
+    border-color: var(--success-color);
+}
+.user-details .input-box.danger input{
+    border-color: var(--danger-color);
+}
+.user-details .input-box i{
+    top: 45px;
+    right: 10px;
+    position: absolute;
+    visibility: hidden;
+}
+.user-details .input-box .error-message{
+    color: var(--danger-color);
+    visibility: hidden;
+}
+.input-box.danger .error-message{
+    visibility: visible;
+}
+.input-box.success input[type="text"]~i.fa.fa-check-circle{
+    visibility: visible;
+    color: var(--success-color);
+}
+.input-box.danger input[type="text"]~i.fa.fa-exclamation-circle{
+    visibility: visible;
+    color: var(--danger-color);
+}
+.input-box i.fa.fa-eye{
+    visibility: visible;
+}
+form .passwd-link{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 50px;
+}
+form .passwd-link .forgot-passwd{
+    text-align: right;
+}
+.form__details button{
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px;
+    margin: 8px 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--danger-color);
+    text-transform: uppercase;
+    background: var(--while-color);
+    transition: all 0.6s ease-in-out;
+
+}
+.form__details button:hover{
+    color: var(--while-color);
+    background-color: var(--primary-color);
+}
+.form__details .register-link{
+    text-align: center;
+}
+.gender-group input[type="radio"]:checked+label{
+    background: var(--primary-color);
+    color: var(--while-color);
+}
+
+
+
+
+
+
+
+@media (min-width: 1240px){
+    .login-form{
+        max-width: 400px;
+    }
+}

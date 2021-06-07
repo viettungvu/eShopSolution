@@ -1,0 +1,46 @@
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+:root{
+    /* @screen-xs-max= */
+    --screen-sm-min: 768px;
+    --screen-md-min:992px;
+    --screen-lg-min:1200px;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    font-family: 'Poppins', sans-serif;
+}
+html{
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.wide{
+    width: 100%;
+    max-width: 1200px;
+    display: block;
+}
+/*PC and larger*/
+@media (min-width: 1240px){
+    .container{
+        width: 1200px;
+    }
+}
+/*PC low resolution*/
+@media (min-width: 1024px) and (max-width: 1239px){
+    .container{
+        width: 984px;
+    }
+}
+/*Table*/
+@media (min-width: 740px) and (max-width: 1023px){
+    .container{
+        width: 644px;
+    }
+}

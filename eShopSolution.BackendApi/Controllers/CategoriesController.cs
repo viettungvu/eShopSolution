@@ -36,7 +36,7 @@ namespace eShopSolution.BackendApi.Controllers
             var category = await _categoryService.Update(categoryId, request);
             if (!category)
                 return BadRequest("Failed");
-            return Ok("Successful");
+            return Ok();
         }
 
         [HttpDelete("{categoryId}")]
@@ -45,7 +45,7 @@ namespace eShopSolution.BackendApi.Controllers
             var result = await _categoryService.Delete(categoryId);
             if (!result)
                 return BadRequest("Failed");
-            return Ok("Deleted");
+            return Ok();
         }
 
         [HttpGet("{categoryId}/{languageId}")]

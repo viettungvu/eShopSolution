@@ -1,6 +1,6 @@
 using System;
 
-namespace eShopSolution.BackendApi.Models
+namespace eShopSolution.AdminApp.Models
 {
     public class ErrorViewModel
     {
