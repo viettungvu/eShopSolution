@@ -57,9 +57,17 @@ namespace eShopSolution.Application.System.Users
             return null;
         }
 
-        public Task<int> Delete(string username)
+        public async Task<bool> Delete(string username)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return false;
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                return true;
+            return false;
         }
 
         public async Task<bool> Register(RegisterRequest request)
@@ -85,9 +93,23 @@ namespace eShopSolution.Application.System.Users
             return false;
         }
 
-        public Task<int> Update(UserUpdateRequest request)
+        public async Task<bool> Update(string username, UserUpdateRequest request)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                throw new EShopException($"Tài khoản {username} không tồn tại");
+            }
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.DoB = request.DoB;
+            user.Email = request.Email;
+            user.PhoneNumber = request.Phone;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return true;
+            return false;
         }
     }
 }

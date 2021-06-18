@@ -12,8 +12,8 @@ namespace eShopSolution.Application.System.Users
 
         Task<bool> Register(RegisterRequest request);
 
-        Task<int> Update(UserUpdateRequest request);
+        Task<bool> Update(string username, UserUpdateRequest request);
 
-        Task<int> Delete(string username);
+        Task<bool> Delete(string username);
     }
 }

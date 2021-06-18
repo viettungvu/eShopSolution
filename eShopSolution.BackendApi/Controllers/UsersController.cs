@@ -44,5 +44,27 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest("Đăng kí thất bại");
             return Ok();
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] string username)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var result = await _userService.Delete(username);
+            if (!result)
+                return BadRequest("Xoa that bai");
+            return Ok();
+        }
+
+        [HttpPatch("{username}")]
+        public async Task<IActionResult> Update([FromQuery] string username, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var result = await _userService.Update(username, request);
+            if (!result)
+                return BadRequest("Cap nhat that bai");
+            return Ok();
+        }
     }
 }

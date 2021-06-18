@@ -314,34 +314,6 @@ namespace eShopSolution.Application.Catalog.Products
             return pagedResult;
         }
 
-        //public async Task<List<ProductViewModel>> GetAll()
-        //{
-        //    var query = from p in _context.Products
-        //                join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-        //                join pic in _context.ProductInCategories on p.Id equals pic.ProductID
-        //                join c in _context.Categories on pic.CategoryID equals c.Id
-        //                join pi in _context.ProductImages on p.Id equals pi.ProductId
-        //                select new { p, pt, pic, pi };
-        //    var data = await query.Select(x => new ProductViewModel()
-        //    {
-        //        Id = x.p.Id,
-        //        Name = x.pt.Name,
-        //        Description = x.pt.Description,
-        //        Details = x.pt.Details,
-        //        SeoAlias = x.pt.SeoAlias,
-        //        SeoTitle = x.pt.SeoTitle,
-        //        SeoDescription = x.pt.SeoDescription,
-        //        Stock = x.p.Stock,
-        //        Price = x.p.Price,
-        //        OriginalPrice = x.p.OriginalPrice,
-        //        ViewCount = x.p.ViewCount,
-        //        LanguageId = x.pt.LanguageId,
-        //        ThumbnailImage = x.pi.Path
-        //    }).ToListAsync();
-        //    return data;
-        //}
-
-        //Image APIs
         public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
