@@ -6,69 +6,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Login TechShop</title>
-    <link href="/css/styles.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <title>Admin Login</title>
 </head>
-<body class="bg-primary">
-    <div id="layoutAuthentication">
-        <div id="layoutAuthentication_content">
-            <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5">
-                            <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
-                                <div class="card-body">
-                                    <form asp-controller="user" asp-action="login" method="post">
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" asp-for="Username" type="text" placeholder="vuviettung" />
-                                            <label for="inputEmail">Username</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" asp-for="Password" type="password" placeholder="Password" />
-                                            <label for="inputPassword">Password</label>
-                                        </div>
-                                        <div class="form-check mb-3">
-                                            <input class="form-check-input" asp-for="IsRemember" type="checkbox" value="" />
-                                            <label class="form-check-label" asp-for="IsRemember">Remember Password</label>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="password.html">Forgot Password?</a>
-                                            <button class="btn btn-primary" type="submit">Login</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="">Liên hệ quản trị viên</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<body>
+    <div class="container">
+        <div class="login-wrapper">
+            <div class="login-container">
+                <div class="login-title">
+                    <span class="title"><a href="/user/login">TechShop</a></span>
                 </div>
-            </main>
+                <form asp-controller="user" asp-action="login" method="post" class="login-form" id="login-form">
+                    <div class="form-floating">
+                        <label for="">Username</label>
+                        <input asp-for="Username" class="form-control" type="text" id="username">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span asp-validation-for="Username"></span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="">Password</label>
+                        <input asp-for="Password" class="form-control" type="password" id="password">
+                        <span class="showPassword">Show</span>
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" class="forgot-password-link">Forgotten password?</a>
+                    </div>
+                    <button type="submit" class="login-btn">Log In</button>
+                </form>
+                <div class="newAccount">
+                    <span class="newAccount-btn" id='newAccountBtn'>Create new account</span>
+                </div>
+            </div>
         </div>
-        <div id="layoutAuthentication_footer">
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Vu Viet Tung 2021</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
+        <div class="signup-modal" id='signupModal'>
+            <div class="signup-container">
+                <div class="signup-title">
+                    <span class="title">Sign Up</span>
+                    <i class="fa fa-times" id='closeBtn'></i>
+                </div>
+                <form action="" class="signup-form" id="signup-form">
+                    <div class="form-floating">
+                        <label for="" class="box-title">First name</label>
+                        <input class="form-control" type="text" name="" id="firstname" autofocus>
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span>Error message</span>
+                    </div>
+                    <div class="form-floating ">
+                        <label for="" class="box-title">Last name</label>
+                        <input class="form-control" type="text" name="" id="lastname">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="" class="box-title">Email or phone</label>
+                        <input class="form-control" type="text" name="" id="newEmail">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating hidden">
+                        <label for="" class="box-title">Re-enter email</label>
+                        <input class="form-control" type="text" name="" id="newEmail2">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="" class="box-title">New password</label>
+                        <input class="form-control" type="password" name="" id="newPassword">
+                        <span class="showPassword">Show</span>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="" class="box-title">Date of birth</label>
+                        <div class="selection-date">
+                            <select name="" id="day">
+                                <option value="1">1</option>
+                                <option value="1">2</option>
+                                <option value="1">3</option>
+                                <option value="1">4</option>
+                            </select>
+                            <select name="" id="month">
+                                <option value="1">Jan</option>
+                                <option value="1">Feb</option>
+                                <option value="1">Mar</option>
+                                <option value="1">Apr</option>
+                            </select>
+                            <select name="" id="year">
+                                <option value="1">2000</option>
+                                <option value="1">2001</option>
+                                <option value="1">2002</option>
+                                <option value="1">2003</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-            </footer>
+                    <div class="form-floating gender">
+                        <label for="" class="box-title">Gender</label>
+                        <div class="gender-box">
+                            <label for="male">
+                                <span>Male</span>
+                                <input type="radio" name="gender" id="male" checked>
+                                <span class="custom-radio"></span>
+                            </label>
+                            <label for="female">
+                                <span>Female</span>
+                                <input type="radio" name="gender" id="female">
+                                <span class="custom-radio"></span>
+                            </label>
+                            <label for="orther">
+                                <span>orther</span>
+                                <input type="radio" name="gender" id="orther">
+                                <span class="custom-radio"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="policies">
+                        <p class="policy-text">By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. You may receive SMS notifications from us and can opt out at any time.</p>
+                    </div>
+                    <button type="submit" class="signup-btn">Sign Up</button>
+                </form>
+            </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="/js/scripts.js"></script>
+    <script src="/js/login.js"></script>
+    <script src="/js/validator.js"></script>
+    <script>
+        Validator({
+            name: '#login-form',
+            rules: [
+                Validator.isRequired('#username'),
+                Validator.minLength('#password', 8),
+            ]
+        });
+        Validator({
+            name: 'signup-form',
+            rules: [
+                Validator.isRequired('firstname'),
+                Validator.isRequired('lastname'),
+            ]
+        })
+    </script>
 </body>
 </html>
