@@ -124,7 +124,7 @@ body {
     margin-top: 10px;
 }
 
-.form-floating .showPassword {
+.form-floating span.showPassword {
     position: absolute;
     right: 10px;
     font-size: 12px;
@@ -160,13 +160,13 @@ body {
     color: var(--danger-color);
 }
 
-.form-floating span {
+.form-floating span.error-message {
     color: var(--danger-color);
     font-size: 13px;
     display: none;
 }
 
-.form-floating.danger span {
+.form-floating.danger span.error-message {
     display: block;
 }
 

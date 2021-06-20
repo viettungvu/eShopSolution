@@ -12,6 +12,7 @@ namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -46,7 +47,6 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         [HttpPatch("{username}/change-password")]
-        [Authorize]
         public async Task<IActionResult> ChangePassword(string username, [FromBody] ChangePasswordRequest request)
         {
             if (!ModelState.IsValid)
@@ -58,7 +58,6 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         [HttpDelete("{username}")]
-        [Authorize]
         public async Task<IActionResult> Delete(string username)
         {
             var result = await _userService.Delete(username);
@@ -67,7 +66,7 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok();
         }
 
-        //https:/localhost/api/users/paging?pageIndex=1&keyword=
+        //https:/localhost/api/users/paging?pageIndex=1&keyword=?
         [HttpGet("paging")]
         public async Task<IActionResult> GetUserPaging([FromQuery] UserPagingRequest request)
         {

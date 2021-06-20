@@ -44,6 +44,7 @@ namespace eShopSolution.AdminApp.Controllers
 
         public IActionResult Logout()
         {
+            HttpContext.Session.Remove("Token");
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "User");
         }

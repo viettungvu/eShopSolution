@@ -26,13 +26,13 @@
                         <input asp-for="Username" class="form-control" type="text" id="username">
                         <i class="fa fa-check-circle"></i>
                         <i class="fa fa-exclamation-circle"></i>
-                        <span asp-validation-for="Username"></span>
+                        <span asp-validation-for="Username" class="error-message"></span>
                     </div>
                     <div class="form-floating">
                         <label for="">Password</label>
                         <input asp-for="Password" class="form-control" type="password" id="password">
-                        <span class="showPassword">Show</span>
-                        <span asp-validation-for="Password"></span>
+                        <span class="showPassword">show</span>
+                        <span asp-validation-for="Password" class="error-message"></span>
                     </div>
                     <div class="forgot-password">
                         <a href="#" class="forgot-password-link">Forgotten password?</a>
@@ -50,43 +50,43 @@
                     <span class="title">Sign Up</span>
                     <i class="fa fa-times" id='closeBtn'></i>
                 </div>
-                <form action="" class="signup-form" id="signup-form">
+                <form asp-action="register" asp-controller="user" class="signup-form" id="signup-form">
                     <div class="form-floating">
-                        <label for="" class="box-title">First name</label>
-                        <input class="form-control" type="text" name="" id="firstname" autofocus>
+                        <label for="">First name</label>
+                        <input class="form-control" type="text" id="firstname" autofocus>
                         <i class="fa fa-check-circle"></i>
                         <i class="fa fa-exclamation-circle"></i>
-                        <span>Error message</span>
+                        <span class="error-message">Error message</span>
                     </div>
                     <div class="form-floating ">
-                        <label for="" class="box-title">Last name</label>
-                        <input class="form-control" type="text" name="" id="lastname">
+                        <label for="">Last name</label>
+                        <input class="form-control" type="text" id="lastname">
                         <i class="fa fa-check-circle"></i>
                         <i class="fa fa-exclamation-circle"></i>
                         <span class="error-message">Error message</span>
                     </div>
                     <div class="form-floating">
-                        <label for="" class="box-title">Email or phone</label>
-                        <input class="form-control" type="text" name="" id="newEmail">
+                        <label for="">Email or phone</label>
+                        <input class="form-control" type="text" id="newEmail" autocomplete="off">
                         <i class="fa fa-check-circle"></i>
                         <i class="fa fa-exclamation-circle"></i>
                         <span class="error-message">Error message</span>
                     </div>
                     <div class="form-floating hidden">
-                        <label for="" class="box-title">Re-enter email</label>
-                        <input class="form-control" type="text" name="" id="newEmail2">
+                        <label for="">Re-enter email</label>
+                        <input class="form-control" type="text" id="newEmail2">
                         <i class="fa fa-check-circle"></i>
                         <i class="fa fa-exclamation-circle"></i>
                         <span class="error-message">Error message</span>
                     </div>
                     <div class="form-floating">
-                        <label for="" class="box-title">New password</label>
-                        <input class="form-control" type="password" name="" id="newPassword">
+                        <label for="">New password</label>
+                        <input class="form-control" type="password" id="newPassword" autocomplete="off">
                         <span class="showPassword">Show</span>
                         <span class="error-message">Error message</span>
                     </div>
                     <div class="form-floating">
-                        <label for="" class="box-title">Date of birth</label>
+                        <label for="">Date of birth</label>
                         <div class="selection-date">
                             <select name="" id="day">
                                 <option value="1">1</option>
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="form-floating gender">
-                        <label for="" class="box-title">Gender</label>
+                        <label for="">Gender</label>
                         <div class="gender-box">
                             <label for="male">
                                 <span>Male</span>
@@ -143,16 +143,21 @@
             name: '#login-form',
             rules: [
                 Validator.isRequired('#username'),
+                Validator.isRequired('#password'),
                 Validator.minLength('#password', 8),
             ]
         });
+    </script>
+    <script> 
         Validator({
-            name: 'signup-form',
+            name: '#signup-form',
             rules: [
-                Validator.isRequired('firstname'),
-                Validator.isRequired('lastname'),
+                Validator.isRequired('#firstname'),
+                Validator.isRequired('#lastname'),
+                Validator.IsPhone('#phone'),
+                Validator.IsEmail('#newemail'),
             ]
-        })
+        });
     </script>
 </body>
 </html>
