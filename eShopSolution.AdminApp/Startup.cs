@@ -30,6 +30,7 @@ namespace eShopSolution.AdminApp
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
+            services.AddHttpContextAccessor();
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddHttpClient();
             services.AddHttpClient("meta", c =>
@@ -39,7 +40,7 @@ namespace eShopSolution.AdminApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
             {
-                options.LoginPath = "/user/login";
+                options.LoginPath = "/login/index";
                 options.AccessDeniedPath = "/account/forbidden";
             });
             IMvcBuilder builder = services.AddRazorPages();

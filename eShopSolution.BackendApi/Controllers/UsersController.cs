@@ -28,21 +28,21 @@ namespace eShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var resultToken = await _userService.Authenticate(request);
-            if (string.IsNullOrEmpty(resultToken))
-                return BadRequest();
-            return Ok(resultToken);
+            var result = await _userService.Authenticate(request);
+            if (string.IsNullOrEmpty(result.ResultObject))
+                return BadRequest(result.Message);
+            return Ok(result.ResultObject);
         }
 
-        [HttpPost()]
+        [HttpPost("create")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var result = await _userService.Register(request);
-            if (!result)
-                return BadRequest("Register failed");
+            if (!result.IsSuccessed)
+                return BadRequest(result.Message);
             return Ok();
         }
 
@@ -52,17 +52,18 @@ namespace eShopSolution.BackendApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var result = await _userService.ChangePassword(username, request);
-            if (!result)
-                return BadRequest("An error occurred while changing your password");
+            if (!result.IsSuccessed)
+                return BadRequest(result.Message);
             return Ok();
         }
 
+        //SELETE: https:/localhost/api/user/username?
         [HttpDelete("{username}")]
         public async Task<IActionResult> Delete(string username)
         {
             var result = await _userService.Delete(username);
-            if (!result)
-                return BadRequest($"An error occurred while deleting user {username}");
+            if (!result.IsSuccessed)
+                return BadRequest(result.Message);
             return Ok();
         }
 
@@ -71,7 +72,28 @@ namespace eShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetUserPaging([FromQuery] UserPagingRequest request)
         {
             var data = await _userService.GetUserPaging(request);
-            return Ok(data);
+            return Ok(data.ResultObject);
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetByUsername(string username)
+        {
+            var result = await _userService.GetByUsername(username);
+            if (!result.IsSuccessed)
+                return BadRequest(result.Message);
+            return Ok();
+        }
+
+        //PUT: https:/localhost/api/user/username
+        [HttpPut("{username}")]
+        public async Task<IActionResult> Update(string username, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var result = await _userService.Update(username, request);
+            if (!result.IsSuccessed)
+                return BadRequest(result.Message);
+            return Ok();
         }
     }
 }
