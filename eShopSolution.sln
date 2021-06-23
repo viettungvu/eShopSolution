@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.WebApp", "eShopSolution.WebApp\eShopSolution.WebApp.csproj", "{18E29E6C-E886-4BA6-A6F8-CC368D3F3E1A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1E92D2CA-6CC0-4D60-BFB0-827C86D9B721} = {1E92D2CA-6CC0-4D60-BFB0-827C86D9B721}
+		{4B1931F8-CBDF-41A6-B283-17ED52A17E5B} = {4B1931F8-CBDF-41A6-B283-17ED52A17E5B}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Solution Items", "{9F7819D2-F484-49B3-B60C-493EBBEA6F98}"
 	ProjectSection(SolutionItems) = preProject

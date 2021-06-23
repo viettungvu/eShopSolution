@@ -31,7 +31,7 @@ namespace eShopSolution.Application.System.Users
             _config = config;
         }
 
-        public async Task<string> Authenticate(LoginRequest request)
+        public async Task<ApiResult<string>> Authenticate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user != null)
@@ -53,46 +53,46 @@ namespace eShopSolution.Application.System.Users
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSignInKey, SecurityAlgorithms.HmacSha256)
                         );
-                    return new JwtSecurityTokenHandler().WriteToken(token);
+                    return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
                 }
             }
-            return null;
+            return new ApiErrorResult<string>("User does not exist");
         }
 
-        public async Task<bool> ChangePassword(string username, ChangePasswordRequest request)
+        public async Task<ApiResult<bool>> ChangePassword(string username, ChangePasswordRequest request)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
-                if (!result.Succeeded)
-                    return false;
-                return true;
+                if (result.Succeeded)
+                    return new ApiSuccessResult<bool>();
+                return new ApiErrorResult<bool>("Can not change password");
             }
-            return false;
+            return new ApiErrorResult<bool>("User does not exist");
         }
 
-        public async Task<bool> Delete(string username)
+        public async Task<ApiResult<bool>> Delete(Guid id)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
-            {
-                throw new EShopException($"Không tìm thấy tài khoản {username}");
-            }
+                return new ApiErrorResult<bool>("User does not exist");
             var result = await _userManager.DeleteAsync(user);
-            if (!result.Succeeded)
-                return false;
-            return true;
+            if (result.Succeeded)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Delete failed");
         }
 
-        public async Task<bool> Register(RegisterRequest request)
+        public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
+            if (await _userManager.Users.AnyAsync(x => x.UserName == request.Username))
+                return new ApiErrorResult<bool>($"User {request.Username} already registered");
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email))
+                return new ApiErrorResult<bool>($"Email already registered");
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user != null)
-            {
-                throw new EShopException($"Tài khoản {request.Username} đã tồn tại");
-            }
-            var newUser = new AppUser()
+                return new ApiErrorResult<bool>($"User {request.Username} already registered");
+            user = new AppUser()
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
@@ -102,31 +102,48 @@ namespace eShopSolution.Application.System.Users
                 UserName = request.Username,
             };
 
-            var result = await _userManager.CreateAsync(newUser, request.Password);
-            if (!result.Succeeded)
-                return false;
-            return true;
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (result.Succeeded)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Register failed");
         }
 
-        public async Task<bool> Update(string username, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
         {
-            var user = await _userManager.FindByNameAsync(username);
-            if (user != null)
-            {
-                throw new EShopException($"Không tìm thấy tài khoản {username}");
-            }
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != request.Id))
+                return new ApiErrorResult<bool>("Email đã tồn tại");
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.Id = request.Id;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Email = request.Email;
-            user.DoB = request.Dob;
+            user.DoB = request.DoB;
             user.PhoneNumber = request.Phone;
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
-                return true;
-            return false;
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Update failed");
         }
 
-        public async Task<PagedResult<UserVm>> GetUserPaging(UserPagingRequest request)
+        public async Task<ApiResult<UserVm>> GetByUsername(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+                return new ApiErrorResult<UserVm>("Not found");
+            var result = new UserVm()
+            {
+                Id = user.Id,
+                Firstname = user.FirstName,
+                Lastname = user.LastName,
+                Dob = user.DoB,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Username = user.UserName
+            };
+            return new ApiSuccessResult<UserVm>(result);
+        }
+
+        public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(UserPagingRequest request)
         {
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
@@ -139,8 +156,9 @@ namespace eShopSolution.Application.System.Users
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
                 {
-                    ID = x.Id,
-                    FullName = x.FirstName + " " + x.LastName,
+                    Id = x.Id,
+                    Firstname = x.FirstName,
+                    Lastname = x.LastName,
                     Username = x.UserName,
                     Dob = x.DoB,
                     Email = x.Email,
@@ -149,10 +167,30 @@ namespace eShopSolution.Application.System.Users
             //4. Select
             var pagedResult = new PagedResult<UserVm>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 ListItems = await data
             };
-            return pagedResult;
+            return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
+        }
+
+        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return new ApiErrorResult<UserVm>("Not found");
+            var uservm = new UserVm()
+            {
+                Id = user.Id,
+                Firstname = user.FirstName,
+                Lastname = user.LastName,
+                Dob = user.DoB,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Username = user.UserName
+            };
+            return new ApiSuccessResult<UserVm>(uservm);
         }
     }
 }

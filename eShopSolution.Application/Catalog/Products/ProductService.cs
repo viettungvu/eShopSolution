@@ -196,7 +196,7 @@ namespace eShopSolution.Application.Catalog.Products
             //4. Select
             var pagedResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
                 ListItems = await data
             };
             return pagedResult;
@@ -308,7 +308,7 @@ namespace eShopSolution.Application.Catalog.Products
             //4. Select
             var pagedResult = new PagedResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
                 ListItems = await data
             };
             return pagedResult;

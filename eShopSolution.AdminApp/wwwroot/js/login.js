@@ -1,7 +1,14 @@
-﻿const signUpModal = document.getElementById('signupModal');
+﻿import validator from "validator";
+
+const signUpModal = document.getElementById('signupModal');
 const closeBtn = document.getElementById('closeBtn');
 const newAccountBtn = document.getElementById('newAccountBtn');
 const username = document.getElementById('#username');
+const loginBtn = document.getElementById('loginBtn');
+loginBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    
+});
 window.addEventListener('keyup', escPress);
 function closeModal(modal) {
     modal.style.display = "none";
@@ -21,8 +28,3 @@ newAccountBtn.onclick = function () {
 closeBtn.onclick = function () {
     closeModal(signUpModal);
 }
-
-const showpasswords = document.querySelectorAll('.showPassword');
-console.log(showpasswords);
-const inputElements = document.querySelectorAll("input[type='password']");
-console.log(inputElements);

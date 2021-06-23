@@ -1,8 +1,390 @@
 ﻿@{
+    Layout = null;
+}
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/web_pc.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/slide-wrapper.css">
+    <link rel="stylesheet" href="/css/category-card.css">
+    <link rel="stylesheet" href="/css/product-card.css">
+    <link rel="stylesheet" href="/css/product-quickview-modal.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <title>TechShop-Thế giới camera</title>
+</head>
+<body>
+    <div class="root">
+        <div class="app">
+            <header class="header-wrapper">
+                <nav class="wide navigation">
+                    <div class="navigation__content">
+                        <img src="/assets/img/logo 3.png" alt="logo" class="navigation__logo" />
+                        <input type="text"
+                               placeholder="Tìm kiếm sản phẩm"
+                               class="navigation__input" />
+                        <ul class="navigation__list">
+                            <li class="navigation__item"><a href="#"><i class="fa fa-lock"></i>Đăng nhập</a></li>
+                            <li class="navigation__item"><a href="#"><i class="fa fa-book"></i>Đăng Kí</a></li>
+                            <li class="navigation__item"><a href="#"><i class="fa fa-cart-arrow-down"></i>Giỏ hàng</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <main class="main" id="main">
+                <section class="slider-wrapper">
+                    <div class="wide slider-container">
+                        <div class="slider">
+                            <ul id="slides">
+                                <li class="slide">
+                                    <img id='img1' src="/assets/img/banner1.png" alt="">
+                                </li>
+                                <li class="slide">
+                                    <img id='img2' src="/assets/img/banner2.png" alt="">
+                                </li>
+                                <li class="slide">
+                                    <img id='img3' src="/assets/img/banner1.png" alt="">
+                                </li>
+                                <li class="slide">
+                                    <img id='img4' src="/assets/img/banner2.png" alt="">
+                                </li>
+                            </ul>
+                            <!-- <div class="slider-nav">
+                                 <input type="radio" name="slide" id="r1"  checked>
+                                 <label for="r1"></label>
+                                 <input type="radio" name="slide" id="r2">
+                                 <label for="r2"></label>
+                                 <input type="radio" name="slide" id="r3">
+                                 <label for="r3"></label>
+                                 <input type="radio" name="slide" id="r4">
+                                 <label for="r4"></label>
+                                 <input type="radio" name="slide" id="r5">
+                                 <label for="r5"></label>
+                             </div> -->
+                            <div class=slider-btn btn-prev" id="prevBtn">
+                                <i class="fa fa-arrow-left"></i>
+                            </div>
+                            <div class="slider-btn btn-next" id="nextBtn">
+                                <i class="fa fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="banner-top">
+                            <img src="/assets/img/banner2.png" alt="">
+                        </div>
+                        <div class="banner-bottom">
+                            <img src="/assets/img/banner2.png" alt="">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bestsale-wrapper">
+                    <div class="wide bestsale-container">
+                        <div class="bestsale-box-title">
+                            <span class="box-title">Top sale</span>
+                        </div>
+                        <div class="bestsale-list-wrapper">
+                            <ul class="bestsale-list">
+                                <li class="bestsale-item">
+                                    <div class="p-card-wrapper">
+                                        <div class="p-card-container">
+                                            <div class="p-ribbon">
+                                                <span class="ribbon ribbon--new">New</span>
+                                            </div>
+                                            <a href="" class="p-img">
+                                                <img src="/assets/img/cam3.png" alt="" class="fit-img">
+                                            </a>
+                                            <div class="p-text">
+                                                <a href="" class="p-name">Máy ảnh Canon chính hãng</a>
+                                                <span class="p-sku">Mã sản phẩm: SKU21012000</span>
+                                                <div class="p-price-container">
+                                                    <del class="p-old-price">19.000.000</del>
+                                                    <span class="p-discount">-10%</span>
+                                                    <span class="p-price">20.000.000 <sup>đ</sup></span>
+                                                </div>
+                                                <div class="p-special-container">1 khuyến mãi</div>
+                                            </div>
+                                            <div class="p-relative">
+                                                <button class="btn btn-primary quick-view">Quick view</button>
+                                                <button class="btn btn-primary add">Add to cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="product-item">
+                                    <div class="p-card-wrapper">
+                                        <div class="p-card-container">
+                                            <div class="p-ribbon">
+                                                <span class="ribbon ribbon--new">New</span>
+                                            </div>
+                                            <a href="" class="p-img">
+                                                <img src="/assets/img/cam-outdoor.png" alt="" class="fit-img">
+                                            </a>
+                                            <div class="p-text">
+                                                <a href="" class="p-name">Máy ảnh Canon chính hãng</a>
+                                                <span class="p-sku">Mã sản phẩm: SKU21012000</span>
+                                                <div class="p-price-container">
+                                                    <del class="p-old-price">19.000.000</del>
+                                                    <span class="p-discount">-10%</span>
+                                                    <span class="p-price">20.000.000 <sup>đ</sup></span>
+                                                </div>
+                                                <div class="p-special-container">1 khuyến mãi</div>
+                                            </div>
+
+                                            <div class="p-relative">
+                                                <button class="btn btn-primary quick-view">Quick view</button>
+                                                <button class="btn btn-primary add">Add to cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="product-item">
+                                    <div class="p-card-wrapper">
+                                        <div class="p-card-container">
+                                            <div class="p-ribbon">
+                                                <span class="ribbon ribbon--new">New</span>
+                                            </div>
+                                            <a href="" class="p-img">
+                                                <img src="/assets/img/cam3.png" alt="" class="fit-img">
+                                            </a>
+                                            <div class="p-text">
+                                                <a href="" class="p-name">Máy ảnh Canon chính hãng</a>
+                                                <span class="p-sku">Mã sản phẩm: SKU21012000</span>
+                                                <div class="p-price-container">
+                                                    <del class="p-old-price">19.000.000</del>
+                                                    <span class="p-discount">-10%</span>
+                                                    <span class="p-price">20.000.000 <sup>đ</sup></span>
+                                                </div>
+                                                <div class="p-special-container">1 khuyến mãi</div>
+                                            </div>
+
+                                            <div class="p-relative">
+                                                <button class="btn btn-primary quick-view">Quick view</button>
+                                                <button class="btn btn-primary add">Add to cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="product-item">
+                                    <div class="p-card-wrapper">
+                                        <div class="p-card-container">
+                                            <div class="p-ribbon">
+                                                <span class="ribbon ribbon--new">New</span>
+                                            </div>
+                                            <a href="" class="p-img">
+                                                <img src="/assets/img/cam3.png" alt="" class="fit-img">
+                                            </a>
+                                            <div class="p-text">
+                                                <a href="" class="p-name">Máy ảnh Canon chính hãng</a>
+                                                <span class="p-sku">Mã sản phẩm: SKU21012000</span>
+                                                <div class="p-price-container">
+                                                    <del class="p-old-price">19.000.000</del>
+                                                    <span class="p-discount">-10%</span>
+                                                    <span class="p-price">20.000.000 <sup>đ</sup></span>
+                                                </div>
+                                                <div class="p-special-container">1 khuyến mãi</div>
+                                            </div>
+                                            <div class="p-relative">
+                                                <button class="btn btn-primary quick-view">Quick view</button>
+                                                <button class="btn btn-primary add">Add to cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="product-item">
+                                    <div class="p-card-wrapper">
+                                        <div class="p-card-container">
+                                            <div class="p-ribbon">
+                                                <span class="ribbon ribbon--new">New</span>
+                                            </div>
+                                            <a href="" class="p-img">
+                                                <img src="/assets/img/cam3.png" alt="" class="fit-img">
+                                            </a>
+                                            <div class="p-text">
+                                                <a href="" class="p-name">Máy ảnh Canon chính hãng</a>
+                                                <span class="p-sku">Mã sản phẩm: SKU21012000</span>
+                                                <div class="p-price-container">
+                                                    <del class="p-old-price">19.000.000</del>
+                                                    <span class="p-discount">-10%</span>
+                                                    <span class="p-price">20.000.000 <sup>đ</sup></span>
+                                                </div>
+                                                <div class="p-special-container">1 khuyến mãi</div>
+                                            </div>
+                                            <div class="p-relative">
+                                                <button class="btn btn-primary quick-view">Quick view</button>
+                                                <button class="btn btn-primary add">Add to cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="product-more">
+                            <span>
+                                <a href="">View all >></a>
+                            </span>
+                        </div>
+                    </div>
+                </section>
+                <section class="category-wrapper">
+                    <div class="wide category-container">
+                        <div class="category-box-title">
+                            <span class="box-title">Categories</span>
+                        </div>
+                        <div class="category-list-wrapper">
+                            <ul class="category-list">
+                                <li class="category-item">
+                                    <div class="c-card-wrapper">
+                                        <div class="c-card-container">
+                                            <div class="c-thumnail">
+                                                <img src="/assets/img/cam-outdoor.png" alt="" class="fit-img">
+                                            </div>
+                                            <div class="c-text">
+                                                <span class="c-name">Camera outdoor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="category-item">
+                                    <div class="c-card-wrapper">
+                                        <div class="c-card-container">
+                                            <div class="c-thumnail">
+                                                <img src="/assets/img/cam-outdoor.png" alt="" class="fit-img">
+                                            </div>
+                                            <div class="c-text">
+                                                <span class="c-name">Camera outdoor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="category-item">
+                                    <div class="c-card-wrapper">
+                                        <div class="c-card-container">
+                                            <div class="c-thumnail">
+                                                <img src="/assets/img/cam-outdoor.png" alt="" class="fit-img">
+                                            </div>
+                                            <div class="c-text">
+                                                <span class="c-name">Camera outdoor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="category-item">
+                                    <div class="c-card-wrapper">
+                                        <div class="c-card-container">
+                                            <div class="c-thumnail">
+                                                <img src="/assets/img/cam-outdoor.png" alt="" class="fit-img">
+                                            </div>
+                                            <div class="c-text">
+                                                <span class="c-name">Camera outdoor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="category-item">
+                                    <div class="c-card-wrapper">
+                                        <div class="c-card-container">
+                                            <div class="c-thumnail">
+                                                <img src="/assets/img/cam-outdoor.png" alt="" class="fit-img">
+                                            </div>
+                                            <div class="c-text">
+                                                <span class="c-name">Camera outdoor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="product-more">
+                            <span><a href="">View all >></a></span>
+                        </div>
+                    </div>
+                </section>
+                <section class="product-wrapper">
+                    <div class="wide product-container">
+                        <div class="product-box-title">
+                            <span class="box-title">Products</span>
+                        </div>
+                        <div class="product-list-wrapper">
+                            <ul class="product-list">
+                                <li class="product-item">
+                                    <div class="p-card-wrapper">
+                                        <div class="p-card-container">
+                                            <div class="p-ribbon">
+                                                <span class="ribbon ribbon--new">New</span>
+                                            </div>
+                                            <a href="" class="p-img">
+                                                <img src="/assets/img/cam3.png" alt="" class="fit-img">
+                                            </a>
+                                            <div class="p-text">
+                                                <a href="" class="p-name">Máy ảnh Canon chính hãng Lê Bảo Minh nhập khẩu </a>
+                                                <span class="p-sku">Mã sản phẩm: SKU21012000</span>
+                                                <div class="p-price-container">
+                                                    <del class="p-old-price">19.000.000</del>
+                                                    <span class="p-discount">-10%</span>
+                                                    <span class="p-price">20.000.000 <sup>đ</sup></span>
+                                                </div>
+                                                <div class="p-special-container">1 khuyến mãi</div>
+                                            </div>
+                                            <div class="p-relative">
+                                                <button class="btn btn-quickview">Quick view</button>
+                                                <button class="btn btn-add active">Add to cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="product-more">
+                            <span>
+                                <a href="">View all >></a>
+                            </span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <footer class="footer">
+                <div class="footer-wrapper">
+                    <div class="wide footer-container">
+                        <div class="noidung">
+                            <h2>VỀ CHÚNG TÔI</h2>
+                            <p>Luôn mang lại những sản phẩm tốt nhất, cùng với uy tín và chất lượng.</p>
+                            <p>kết nối với chúng tôi:</p>
+                            <ul class="icon">
+                                <li><a href="#"><img src="/assets/img/fb.png" width="30" height="30"></a></li>
+                                <li><a href="#"><img src="assets/img/ig.png" width="30" height="30"></a></li>
+                                <li><a href="#"><img src="assets/img/youtube.png" width="30" height="30"></a></li>
+                            </ul>
+                        </div>
+                        <div class="chinhsach">
+                            <h2>CHÍNH SÁCH CÔNG TY</h2>
+                            <ul class="ul-cs">
+                                <li><a href="#">Quy định và hình thức thanh toán</a></li>
+                                <li><a href="#">Chính sách vận chuyển,giao nhận</a></li>
+                                <li><a href="#">Chính sách đổi, trả hàng</a></li>
+                                <li><a href="#">Chính sách bảo hành</a></li>
+                            </ul>
+                        </div>
+                        <div class="lienhe">
+                            <h2>THÔNG TIN LIÊN HỆ</h2>
+                            <ul class="thongtin">
+                                <li>Địa chỉ: Số 123, đường Nguyễn Trãi, Quận Thanh Xuân, Hà Nội</li>
+                                <li>Đường dây nóng: 19001001</li>
+                                <li>email: cameraso1@gmail.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+</html>

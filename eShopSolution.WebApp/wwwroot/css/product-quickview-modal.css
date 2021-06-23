@@ -1,0 +1,88 @@
+:root{
+    --secondary-color: #858796;
+    --cloud-color: #ecf0f1;
+    --primary-color:#4e73df;
+    --success-color:#1cc88a;
+    --info-color:#36b9cc;
+    --warnin-color:#f6c23e;
+    --danger-color:#e74a3b;
+    --secondary-color: #858796;
+    --light-color:#f8f9fc;
+    --dark-color:#5a5c69;
+    --bg-color:#f7f8fb;
+    --cloud-color: #ecf0f1;
+}
+@keyframes modalOpen {
+    from{transform: scale(0.6,0.6); }
+    to{
+        transform: scale(1,1);
+    }
+}
+.modal-bg{
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.2);
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.modal-content{
+    background: var(--light-color);
+    max-width: 400px;
+    max-height: 400px;
+    padding: 10px;
+    border-radius: 5px;
+    top: 20px;
+    position: relative;
+    animation: modalOpen 1s;
+}
+.modal-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.modal-title span{
+    font-size: 1.5rem;
+    display: block;
+    margin: 0;
+}
+.modal-title .btn-close{
+    height: 100%;
+    width: auto;
+    border-radius: 50%;   
+    cursor: pointer;
+}
+.btn-close:hover{
+    color: var(--danger-color);
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+tr{
+    background: var(--cloud-color);
+    border-bottom: 1px solid var(--primary-color);
+}
+tr:last-child{
+    border-bottom: none;
+}
+td{
+    padding: 5px;  
+}
+td ul{
+    list-style: none;
+}
+.view-detail{
+    display: block;
+    text-align: center; 
+    padding: 5px; 
+    font-size: 0.85rem; 
+}
