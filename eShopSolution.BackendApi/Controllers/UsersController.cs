@@ -12,6 +12,7 @@ namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -27,43 +28,32 @@ namespace eShopSolution.BackendApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var resultToken = await _userService.Authenticate(request);
-            if (string.IsNullOrEmpty(resultToken))
-                return BadRequest("Tài khoản hoặc mật khẩu không chính xác");
-            return Ok(resultToken);
+            var result = await _userService.Authenticate(request);
+            if (string.IsNullOrEmpty(result.ResultObject))
+                return BadRequest(result);
+            return Ok(result);
         }
 
-        [HttpPost("register")]
+        [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var result = await _userService.Register(request);
-            if (!result)
-                return BadRequest("Đăng kí thất bại");
-            return Ok();
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] string username)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var result = await _userService.Delete(username);
-            if (!result)
-                return BadRequest("Xoa that bai");
-            return Ok();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPatch("{username}")]
-        public async Task<IActionResult> Update([FromQuery] string username, [FromBody] UserUpdateRequest request)
+        public async Task<IActionResult> ChangePassword(string username, [FromBody] ChangePasswordRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var result = await _userService.Update(username, request);
-            if (!result)
-                return BadRequest("Cap nhat that bai");
+            var result = await _userService.ChangePassword(username, request);
+            if (!result.IsSuccessed)
+                return BadRequest(result.Message);
             return Ok();
         }
     }

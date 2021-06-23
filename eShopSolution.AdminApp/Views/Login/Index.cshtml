@@ -1,0 +1,164 @@
+﻿@using eShopSolution.ViewModels.System.Users
+@model LoginRequest
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <title>Admin Login</title>
+</head>
+<body>
+    <div class="container">
+        <div class="login-wrapper">
+            <div class="login-container">
+                <div class="login-title">
+                    <span class="title"><a href="/user/login">TechShop</a></span>
+                </div>
+                <form asp-controller="login" asp-action="index" method="post" class="login-form" id="login-form">
+                    <div class="form-floating">
+                        <label for="">Username</label>
+                        <input asp-for="Username" class="form-control" type="text" id="username">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span asp-validation-for="Username" class="error-message"></span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="">Password</label>
+                        <input asp-for="Password" class="form-control" type="password" id="password">
+                        <span class="showPassword">show</span>
+                        <span asp-validation-for="Password" class="error-message"></span>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" class="forgot-password-link">Forgotten password?</a>
+                    </div>
+                    <button type="submit" class="login-btn" id="loginBtn">Log In</button>
+                </form>
+                <div class="newAccount">
+                    <span class="newAccount-btn" id='newAccountBtn'>Create new account</span>
+                </div>
+            </div>
+        </div>
+        <div class="signup-modal" id='signupModal'>
+            <div class="signup-container">
+                <div class="signup-title">
+                    <span class="title">Sign Up</span>
+                    <i class="fa fa-times" id='closeBtn'></i>
+                </div>
+                <form asp-action="register" asp-controller="user" class="signup-form" id="signup-form">
+                    <div class="form-floating">
+                        <label for="">First name</label>
+                        <input class="form-control" type="text" id="firstname" autofocus>
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating ">
+                        <label for="">Last name</label>
+                        <input class="form-control" type="text" id="lastname">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="">Email or phone</label>
+                        <input class="form-control" type="text" id="newEmail" autocomplete="off">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating hidden">
+                        <label for="">Re-enter email</label>
+                        <input class="form-control" type="text" id="newEmail2">
+                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="">New password</label>
+                        <input class="form-control" type="password" id="newPassword" autocomplete="off">
+                        <span class="showPassword">Show</span>
+                        <span class="error-message">Error message</span>
+                    </div>
+                    <div class="form-floating">
+                        <label for="">Date of birth</label>
+                        <div class="selection-date">
+                            <select name="" id="day">
+                                <option value="1">1</option>
+                                <option value="1">2</option>
+                                <option value="1">3</option>
+                                <option value="1">4</option>
+                            </select>
+                            <select name="" id="month">
+                                <option value="1">Jan</option>
+                                <option value="1">Feb</option>
+                                <option value="1">Mar</option>
+                                <option value="1">Apr</option>
+                            </select>
+                            <select name="" id="year">
+                                <option value="1">2000</option>
+                                <option value="1">2001</option>
+                                <option value="1">2002</option>
+                                <option value="1">2003</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-floating gender">
+                        <label for="">Gender</label>
+                        <div class="gender-box">
+                            <label for="male">
+                                <span>Male</span>
+                                <input type="radio" name="gender" id="male" checked>
+                                <span class="custom-radio"></span>
+                            </label>
+                            <label for="female">
+                                <span>Female</span>
+                                <input type="radio" name="gender" id="female">
+                                <span class="custom-radio"></span>
+                            </label>
+                            <label for="orther">
+                                <span>orther</span>
+                                <input type="radio" name="gender" id="orther">
+                                <span class="custom-radio"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="policies">
+                        <p class="policy-text">By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. You may receive SMS notifications from us and can opt out at any time.</p>
+                    </div>
+                    <button type="submit" class="signup-btn">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/login.js"></script>
+    <script src="/js/validator.js"></script>
+    <script>
+        Validator({
+            name: '#login-form',
+            rules: [
+                Validator.isRequired('#username'),
+                Validator.isRequired('#password'),
+                Validator.minLength('#password', 8),
+            ]
+        });
+    </script>
+    <script>
+
+        Validator({
+            name: '#signup-form',
+            rules: [
+                Validator.isRequired('#firstname'),
+                Validator.isRequired('#lastname'),
+                Validator.IsPhone('#phone'),
+                Validator.IsEmail('#newemail'),
+            ]
+        });
+    </script>
+</body>
+</html>

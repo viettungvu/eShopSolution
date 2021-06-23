@@ -1,0 +1,93 @@
+:root{
+
+    --primary-color:#4e73df;
+    --success-color:#1cc88a;
+    --info-color:#36b9cc;
+    --warning-color:#f6c23e;
+    --danger-color:#e74a3b;
+    --secondary-color: #858796;
+    --light-color:#f8f9fc;
+    --dark-color:#5a5c69;
+    --bg-color:#e4e1e1;
+    --white-color: #fff;
+    --cloud-color: #ecf0f1;
+    --borderTop-color:#3d52bf;
+
+    --main-radius:3px;
+    --main-padding:10px;
+    --sm-padding:2px;
+    --md-padding: 4px;
+    --lg-padding: 10px;
+    --lg-gap:30px;
+    --sm-gap: 2px;
+
+}
+.root{
+    width: 100%;
+}
+.app{
+    width: 100%;
+    display: grid;
+    grid-template-areas: 
+    'header'
+    'main'
+    'footer';
+    gap: var(--lg-gap);
+}
+.slider-container{
+    /* display: grid;
+    grid-template-areas: 
+
+    'slider slider banner-top'
+    'slider slider banner-bottom'
+    ;
+    gap: var(--sm-gap); */
+}
+.slider{
+    grid-area: slider;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.slider-btn{
+    position: absolute;
+    width: 25px;
+    height: 40px;
+    background: var(--cloud-color);
+    opacity: 0.6;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select:none;
+    display: none;
+}
+.slider:hover .slider-btn{
+    display: flex;
+}
+.slider-btn:hover{
+    opacity: 1;
+}
+.btn-prev{
+    left: 0;
+}
+.btn-next{
+    right: 0;
+}
+#slides{
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    list-style: none;
+}
+
+/* .slide:not(:first-child){
+   display: none;
+} */
+/* .banner-top{  
+    grid-area: banner-top;
+}
+.banner-bottom{
+    grid-area: banner-bottom;
+} */
