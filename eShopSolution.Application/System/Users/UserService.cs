@@ -72,11 +72,11 @@ namespace eShopSolution.Application.System.Users
             return new ApiErrorResult<bool>("User does not exist");
         }
 
-        public async Task<ApiResult<bool>> Delete(string username)
+        public async Task<ApiResult<bool>> Delete(Guid id)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
-                return new ApiErrorResult<bool>($"User {username} is not exist");
+                return new ApiErrorResult<bool>("User does not exist");
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
                 return new ApiSuccessResult<bool>();
@@ -85,11 +85,13 @@ namespace eShopSolution.Application.System.Users
 
         public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
+            if (await _userManager.Users.AnyAsync(x => x.UserName == request.Username))
+                return new ApiErrorResult<bool>($"User {request.Username} already registered");
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email))
+                return new ApiErrorResult<bool>($"Email already registered");
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user != null)
                 return new ApiErrorResult<bool>($"User {request.Username} already registered");
-            if (await _userManager.FindByEmailAsync(request.Email) != null)
-                return new ApiErrorResult<bool>($"Email already registered");
             user = new AppUser()
             {
                 FirstName = request.FirstName,
@@ -106,18 +108,16 @@ namespace eShopSolution.Application.System.Users
             return new ApiErrorResult<bool>("Register failed");
         }
 
-        public async Task<ApiResult<bool>> Update(string username, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
         {
-            var email = await _userManager.FindByEmailAsync(request.Email);
-            if (email != null)
-                return new ApiErrorResult<bool>("Email already registered");
-            var user = await _userManager.FindByNameAsync(username);
-            if (user != null)
-                return new ApiErrorResult<bool>($"Account {username} already registered");
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != request.Id))
+                return new ApiErrorResult<bool>("Email đã tồn tại");
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.Id = request.Id;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Email = request.Email;
-            user.DoB = request.Dob;
+            user.DoB = request.DoB;
             user.PhoneNumber = request.Phone;
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -132,7 +132,9 @@ namespace eShopSolution.Application.System.Users
                 return new ApiErrorResult<UserVm>("Not found");
             var result = new UserVm()
             {
-                FullName = user.FirstName + " " + user.LastName,
+                Id = user.Id,
+                Firstname = user.FirstName,
+                Lastname = user.LastName,
                 Dob = user.DoB,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
@@ -154,7 +156,9 @@ namespace eShopSolution.Application.System.Users
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
                 {
-                    FullName = x.FirstName + " " + x.LastName,
+                    Id = x.Id,
+                    Firstname = x.FirstName,
+                    Lastname = x.LastName,
                     Username = x.UserName,
                     Dob = x.DoB,
                     Email = x.Email,
@@ -163,10 +167,30 @@ namespace eShopSolution.Application.System.Users
             //4. Select
             var pagedResult = new PagedResult<UserVm>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 ListItems = await data
             };
             return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
+        }
+
+        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return new ApiErrorResult<UserVm>("Not found");
+            var uservm = new UserVm()
+            {
+                Id = user.Id,
+                Firstname = user.FirstName,
+                Lastname = user.LastName,
+                Dob = user.DoB,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Username = user.UserName
+            };
+            return new ApiSuccessResult<UserVm>(uservm);
         }
     }
 }

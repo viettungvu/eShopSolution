@@ -2,6 +2,7 @@
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -43,17 +44,6 @@ namespace eShopSolution.AdminApp.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
-        public async Task<ApiResult<UserVm>> GetByUsername(string username)
-        {
-            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
-            HttpClient client = _httpClientFactory.CreateClient("meta");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            HttpResponseMessage response = await client.GetAsync($"users/{username}");
-            if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<ApiSuccessResult<UserVm>>(await response.Content.ReadAsStringAsync());
-            return JsonConvert.DeserializeObject<ApiErrorResult<UserVm>>(await response.Content.ReadAsStringAsync());
-        }
-
         public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(UserPagingRequest request)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
@@ -65,28 +55,39 @@ namespace eShopSolution.AdminApp.Services
             return JsonConvert.DeserializeObject<ApiErrorResult<PagedResult<UserVm>>>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<ApiResult<bool>> Delete(string username)
+        public async Task<ApiResult<bool>> Delete(Guid id)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             HttpClient client = _httpClientFactory.CreateClient("meta");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            HttpResponseMessage response = await client.DeleteAsync($"/user/{username}");
+            HttpResponseMessage response = await client.DeleteAsync($"users/{id}");
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(await response.Content.ReadAsStringAsync());
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<ApiResult<bool>> Update(string username, UserUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var json = JsonConvert.SerializeObject(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             HttpClient client = _httpClientFactory.CreateClient("meta");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            HttpResponseMessage response = await client.PutAsync($"users/{username}", httpContent);
+            HttpResponseMessage response = await client.PutAsync($"users/{id}", httpContent);
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(await response.Content.ReadAsStringAsync());
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<ApiResult<UserVm>> GetById(Guid id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            HttpClient client = _httpClientFactory.CreateClient("meta");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            HttpResponseMessage response = await client.GetAsync($"users/{id}");
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<UserVm>>(await response.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<ApiErrorResult<UserVm>>(await response.Content.ReadAsStringAsync());
         }
     }
 }

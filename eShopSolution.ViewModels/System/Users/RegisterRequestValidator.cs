@@ -22,6 +22,7 @@ namespace eShopSolution.ViewModels.System.Users
             RuleFor(x => x.Phone)
                 .Matches("^((84|0)[1|3|5|7|8|9])+([0-9]{8})$").WithMessage("Phone number is invalid");
             RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("Email should not be blank")
                 .Matches("^(([^<>()\\[\\]\\.,;:\\s@]+(\\.[^<>()\\[\\]\\.,;:\\s@]+)*)|(.+))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")
                 .WithMessage("Email is invalid");
             RuleFor(x => x.Password)

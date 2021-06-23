@@ -1,5 +1,6 @@
 ﻿using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
+using System;
 using System.Threading.Tasks;
 
 namespace eShopSolution.Application.System.Users
@@ -12,11 +13,13 @@ namespace eShopSolution.Application.System.Users
 
         Task<ApiResult<bool>> ChangePassword(string username, ChangePasswordRequest request);
 
-        Task<ApiResult<bool>> Update(string username, UserUpdateRequest request);
+        Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
 
-        Task<ApiResult<bool>> Delete(string username);
+        Task<ApiResult<bool>> Delete(Guid id);
 
         Task<ApiResult<UserVm>> GetByUsername(string username);
+
+        Task<ApiResult<UserVm>> GetById(Guid id);
 
         Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(UserPagingRequest request);
     }

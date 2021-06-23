@@ -30,8 +30,8 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
             var result = await _userService.Authenticate(request);
             if (string.IsNullOrEmpty(result.ResultObject))
-                return BadRequest(result.Message);
-            return Ok(result.ResultObject);
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost("create")]
@@ -42,11 +42,11 @@ namespace eShopSolution.BackendApi.Controllers
                 return BadRequest(ModelState);
             var result = await _userService.Register(request);
             if (!result.IsSuccessed)
-                return BadRequest(result.Message);
-            return Ok();
+                return BadRequest(result);
+            return Ok(result);
         }
 
-        [HttpPatch("{username}/change-password")]
+        [HttpPatch("{username}")]
         public async Task<IActionResult> ChangePassword(string username, [FromBody] ChangePasswordRequest request)
         {
             if (!ModelState.IsValid)
@@ -57,14 +57,14 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok();
         }
 
-        //SELETE: https:/localhost/api/user/username?
-        [HttpDelete("{username}")]
-        public async Task<IActionResult> Delete(string username)
+        //DELETE: https:/localhost/api/user/username?
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _userService.Delete(username);
+            var result = await _userService.Delete(id);
             if (!result.IsSuccessed)
-                return BadRequest(result.Message);
-            return Ok();
+                return BadRequest(result);
+            return Ok(result);
         }
 
         //https:/localhost/api/users/paging?pageIndex=1&keyword=?
@@ -72,28 +72,29 @@ namespace eShopSolution.BackendApi.Controllers
         public async Task<IActionResult> GetUserPaging([FromQuery] UserPagingRequest request)
         {
             var data = await _userService.GetUserPaging(request);
-            return Ok(data.ResultObject);
+            return Ok(data);
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetByUsername(string username)
-        {
-            var result = await _userService.GetByUsername(username);
-            if (!result.IsSuccessed)
-                return BadRequest(result.Message);
-            return Ok();
-        }
-
-        //PUT: https:/localhost/api/user/username
-        [HttpPut("{username}")]
-        public async Task<IActionResult> Update(string username, [FromBody] UserUpdateRequest request)
+        //PUT: https:/localhost/api/user/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var result = await _userService.Update(username, request);
+            var result = await _userService.Update(id, request);
             if (!result.IsSuccessed)
-                return BadRequest(result.Message);
-            return Ok();
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        //GET: https:/localhost/api/user/id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _userService.GetById(id);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

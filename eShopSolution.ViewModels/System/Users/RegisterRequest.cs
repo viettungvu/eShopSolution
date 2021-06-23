@@ -7,11 +7,14 @@ namespace eShopSolution.ViewModels.System.Users
 {
     public class RegisterRequest
     {
+        [DataType(DataType.Text)]
         public string FirstName { get; set; }
 
+        [DataType(DataType.Text)]
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
+        [Display(Name = "Date of birth")]
         public DateTime DoB { get; set; }
 
         [DataType(DataType.EmailAddress)]

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace eShopSolution.AdminApp.Controllers
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
         {
             var request = new UserPagingRequest()
             {
@@ -43,52 +44,61 @@ namespace eShopSolution.AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RegisterRequest request)
         {
-            if (_userApiClient.GetByUsername(request.Username) != null)
-            {
-                ModelState.AddModelError("Username", $"User {request.Username} already registered");
-                return View(request);
-            }
             if (!ModelState.IsValid)
-                return View(ModelState);
+                return View();
             var result = await _userApiClient.Create(request);
             if (result.IsSuccessed)
                 return RedirectToAction("Index", "User");
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(string username)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _userApiClient.Delete(username);
+            var result = await _userApiClient.Delete(id);
             if (result.IsSuccessed)
                 return RedirectToAction("Index", "User");
             ModelState.AddModelError("", result.Message);
-            return View(ModelState);
+            return View();
         }
 
         [HttpGet]
-        public IActionResult Edit(string username)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var user = _userApiClient.GetByUsername(username);
-            return View(user);
+            var user = await _userApiClient.GetById(id);
+            var updateRequest = new UserUpdateRequest()
+            {
+                Id = id,
+                FirstName = user.ResultObject.Firstname,
+                LastName = user.ResultObject.Lastname,
+                DoB = user.ResultObject.Dob,
+                Phone = user.ResultObject.PhoneNumber,
+                Email = user.ResultObject.Email,
+            };
+            return View(updateRequest);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Edit(string username, UserUpdateRequest request)
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
-                return View(ModelState);
-            var result = await _userApiClient.Update(username, request);
+                return View();
+            var result = await _userApiClient.Update(request.Id, request);
             if (result.IsSuccessed)
                 return RedirectToAction("Index", "User");
+            ModelState.AddModelError("", result.Message);
+
             return View(request);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByUsername(string username)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var result = await _userApiClient.GetByUsername(username);
-            return View(result.ResultObject);
+            var result = await _userApiClient.GetById(id);
+            if (result.IsSuccessed)
+                return View(result.ResultObject);
+            return View();
         }
     }
 }

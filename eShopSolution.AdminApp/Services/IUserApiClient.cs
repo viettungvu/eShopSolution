@@ -13,12 +13,12 @@ namespace eShopSolution.AdminApp.Services
 
         Task<ApiResult<bool>> Create(RegisterRequest request);
 
-        Task<ApiResult<UserVm>> GetByUsername(string username);
-
         Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(UserPagingRequest request);
 
-        Task<ApiResult<bool>> Delete(string username);
+        Task<ApiResult<bool>> Delete(Guid id);
 
-        Task<ApiResult<bool>> Update(string username, UserUpdateRequest request);
+        Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
+
+        Task<ApiResult<UserVm>> GetById(Guid id);
     }
 }
