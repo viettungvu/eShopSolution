@@ -1,4 +1,5 @@
 ﻿using eShopSolution.Application.Catalog.Products;
+using eShopSolution.Application.Common;
 using eShopSolution.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,142 +9,134 @@ namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IStorageService _storageService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IStorageService storageService)
         {
             _productService = productService;
+            _storageService = storageService;
         }
 
         [HttpPost("new")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var productId = await _productService.Create(request);
-            var product = await _productService.GetById(productId, request.LanguageId);
-            if (productId == 0)
-            {
                 return BadRequest();
-            }
-            return Created(nameof(GetById), product);
-        }/*DONE*/
+            var result = await _productService.Create(request);
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Created(nameof(GetById), result.ResultObject);
+        }
 
-        [HttpPatch("{productId}")]
+        [HttpPatch("{productId}/update")]
         public async Task<IActionResult> Update(int productId, [FromForm] ProductUpdateRequest request)
         {
             var result = await _productService.Update(productId, request);
-            if (result == 0)
+            if (!result.IsSuccessed)
                 return BadRequest();
-            return Ok("Successful");
-        }/*DONE*/
+            return Ok(result);
+        }
 
-        [HttpPatch("{productId}/{newPrice:decimal}")]
-        public async Task<IActionResult> UpdatePrice(int productId, decimal newPrice)
+        [HttpPatch("{productId}/newPrice")]
+        public async Task<IActionResult> UpdatePrice(int productId, [FromQuery] decimal newPrice)
         {
-            var product = await _productService.UpdatePrice(productId, newPrice);
-            if (product == 0)
-                return BadRequest("Update price failed");
-            return Ok("Successful");
-        }/*DONE*/
+            var result = await _productService.UpdatePrice(productId, newPrice);
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Ok(result);
+        }
 
-        [HttpPatch("stock/{productId}/{addedStock:int}")]
-        public async Task<IActionResult> UpdateStock(int productId, int addedStock)
+        [HttpPatch("{productId}/stock")]
+        public async Task<IActionResult> UpdateStock(int productId, [FromQuery] int addedStock)
         {
-            var product = await _productService.UpdateStock(productId, addedStock);
-            if (product == 0)
-                return BadRequest("Update stock failed");
-            return Ok("Successful");
-        }/*DONE*/
+            var result = await _productService.UpdateStock(productId, addedStock);
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Ok(result);
+        }
 
-        [HttpPatch("view")]
+        [HttpPatch("{productId}/view")]
         public async Task<IActionResult> UpdateViewCount(int productId)
         {
             var result = await _productService.UpdateViewCount(productId);
-            if (!result)
-                return BadRequest("Update view count failed");
-            return Ok("Successful");
-        }/*DONE*/
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Ok(result);
+        }
 
         [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId)
         {
             var result = await _productService.Delete(productId);
-            if (result == 0)
-                return BadRequest("Can not delete");
+            if (!result.IsSuccessed)
+                return BadRequest();
             return Ok(result);
-        }/*DONE*/
+        }
 
         [HttpGet("{languageId}")]
         public async Task<IActionResult> GetAllPaging(string languageId, [FromQuery] ProductPagingRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var product = await _productService.GetAllPaging(languageId, request);
-            return Ok(product);
-        }/*DONE*/
+                return BadRequest();
+            var result = await _productService.GetAllPaging(languageId, request);
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Ok(result);
+        }
 
-        //[HttpGet("list")]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var products = await _productService.GetAll();
-        //    return Ok(products);
-        //}/*DONE*/
-
-        [HttpGet("all/{languageId}")]
-        public async Task<IActionResult> GetByCategoryId(string languageId, [FromQuery] ProductPagingRequest request)
+        [HttpGet("category")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId, [FromQuery] ProductPagingRequest request)
         {
-            var product = await _productService.GetByCategoryId(languageId, request);
-            return Ok(product);
-        }/*DONE*/
+            var result = await _productService.GetByCategoryId(categoryId, request);
+            if (!result.IsSuccessed)
+                return NotFound();
+            return Ok(result);
+        }
 
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
-            var product = await _productService.GetById(productId, languageId);
-            if (product == null)
-            {
-                return NotFound($"Not found product {productId}");
-            }
-            return Ok(product);
-        }/*DONE*/
+            var result = await _productService.GetById(productId, languageId);
+            if (!result.IsSuccessed)
+                return NotFound();
+            return Ok(result);
+        }
 
-        [HttpPost("{productId}/image")]
+        [HttpPost("{productId}/addImage")]
         public async Task<IActionResult> AddImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
-            var imageId = await _productService.AddImage(productId, request);
-            var image = await _productService.GetImageById(imageId);
-            if (imageId == 0)
-                return BadRequest("Failed");
-            return Created(nameof(GetImageById), image);
+            var result = await _productService.AddImage(productId, request);
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Ok(result);
         }
 
         [HttpDelete("{productId}/image/{imageId}")]
         public async Task<IActionResult> DeleteImage(int productId, int imageId)
         {
             var result = await _productService.RemoveImage(productId, imageId);
-            if (!result)
-                return BadRequest("Failed");
-            return Ok("Deleted successful");
+            if (!result.IsSuccessed)
+                return BadRequest();
+            return Ok(result);
         }
 
         [HttpPut("{productId}/image/{imageId}")]
         public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
         {
             var result = await _productService.UpdateImage(imageId, request);
-            if (!result)
+            if (result.IsSuccessed)
                 return BadRequest();
-            return Ok();
+            return Ok(result);
         }
 
-        [HttpGet("{productId}/image/{imageId}")]
+        [HttpGet("image/{imageId}")]
         public async Task<IActionResult> GetImageById(int imageId)
         {
             var image = await _productService.GetImageById(imageId);
-            if (image == null)
+            if (!image.IsSuccessed)
                 return NotFound();
             return Ok(image);
         }

@@ -1,0 +1,177 @@
+﻿@using eShopSolution.ViewModels.Common
+@model PagedResult<eShopSolution.ViewModels.Catalog.Categories.CategoryVm>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    <partial name="_Modal" />
+    <partial name="_Alert" />
+}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">List categories</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/category">Categories</a></li>
+        <li class="breadcrumb-item active">List categories</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <button class="btn btn-success" data-url="@Url.Action("create","category")" data-bs-toggle="modal" data-bs-target="#NewModal"><i class="fa fa-plus"></i>New category</button>
+        </div>
+        <div class="card-body">
+            <div class="dataTable-wrapper">
+                <div class="dataTable-top">
+                    <div class="dataTable-dropdown">
+                        <label>
+                            <select class="dataTable-selector">
+                                <option value="5" selected="">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select> entries per page
+                        </label>
+                    </div>
+
+                    <div class="dataTable-search">
+                        <form asp-action="index" method="get">
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="dataTable-input" value="@ViewBag.Keyword" placeholder="Search..." type="text" name="keyword">
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa fa-search"></i>
+                                            Search
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary" onclick="window.location.href='/category'">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="dataTable-container">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th class="w-25">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListItems)
+                                {
+                                    <tr class="text-center" id="row-@item.Id">
+                                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (@item.Status)
+                                                {
+                                                    <span class="badge bg-success">Active</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Locked</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td class="w-25">
+                                            <button type="button" class="btn btn-sm btn-outline-success" data-url="@Url.Action("edit","category",new { id = item.Id })" data-bs-toggle="modal" data-bs-target="#EditModal"><i class="fa fa-pen"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-info" data-url="@Url.Action("details","category",new { id = item.Id })" data-bs-toggle="modal" data-bs-target="#DetailsModal"><i class="fa fa-exclamation-circle"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-url="@Url.Action("delete","category",new { id = item.Id })" data-bs-toggle="modal" data-bs-target="#DeleteModal"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="dataTable-bottom">
+                    <div class="dataTable-info">Totals: @Model.TotalRecords categories</div>
+                    <div class="dataTable-pagination">
+                        @await Component.InvokeAsync("Pager", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(function () {
+            var GetData = function (control) {
+                var url = $(control).data('url');
+                $.get(url).done(function (data) {
+                    $('.modal-content').html(data);
+                });
+            }
+            var PostData = function (control) {
+                var form = $(control).parents().find('form');
+                var action = form.attr('action');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'html',
+                    url: action,
+                    data: {
+                        model: form,
+                    },
+                    success: function (response) {
+                        ShowAlert();
+                        $('.modal').hide();
+                    },
+                    fail: function (response) {
+                        $('.modal-content').html(data);
+                        ShowAlert();
+                    }
+                })
+            }
+
+            var ShowAlert = function () {
+                setTimeout(function () {
+                    $('.toast').toast('show');
+                }, 200);
+            }
+            $('button[data-bs-target="#NewModal"]').on('click', function () {
+                GetData(this);
+            });
+            $('button[data-bs-target="#EditModal"]').on('click', function () {
+                GetData(this);
+            });
+            $('button[data-bs-target="#DetailsModal"]').on('click', function () {
+                GetData(this);
+            });
+            $('button[data-bs-target="#DeleteModal"]').on('click', function () {
+                GetData(this);
+            });
+            $('button#CreateBtn').on('click', function () {
+                PostData(this);
+                ShowAlert();
+            });
+            $('button#EditBtn').on('click', function (event) {
+                PostData(this);
+                ShowAlert();
+            });
+            $('button#DeleteBtn').on('click', function (event) {
+                PostData(this);
+                ShowAlert();
+            });
+        });
+    </script>
+}

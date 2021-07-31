@@ -1,4 +1,6 @@
-﻿using eShopSolution.Application.System.Users;
+﻿using eShopSolution.Application.System.Roles;
+using eShopSolution.Application.System.Users;
+using eShopSolution.ViewModels.System.Roles;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +18,12 @@ namespace eShopSolution.BackendApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IRoleService roleService)
         {
             _userService = userService;
+            _roleService = roleService;
         }
 
         [HttpPost("authenticate")]
@@ -46,22 +50,11 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("{username}")]
-        public async Task<IActionResult> ChangePassword(string username, [FromBody] ChangePasswordRequest request)
+        //GET: https:/localhost/api/users/id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var result = await _userService.ChangePassword(username, request);
-            if (!result.IsSuccessed)
-                return BadRequest(result.Message);
-            return Ok();
-        }
-
-        //DELETE: https:/localhost/api/user/username?
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var result = await _userService.Delete(id);
+            var result = await _userService.GetById(id);
             if (!result.IsSuccessed)
                 return BadRequest(result);
             return Ok(result);
@@ -87,11 +80,22 @@ namespace eShopSolution.BackendApi.Controllers
             return Ok(result);
         }
 
-        //GET: https:/localhost/api/user/id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        //DELETE: https:/localhost/api/user/username?
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _userService.GetById(id);
+            var result = await _userService.Delete(id);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("{id}/role-assign")]
+        public async Task<IActionResult> RoleAssign(Guid id, [FromBody] RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var result = await _userService.RoleAssign(id, request);
             if (!result.IsSuccessed)
                 return BadRequest(result);
             return Ok(result);

@@ -5,15 +5,22 @@
     ViewData["Title"] = "User management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@{
+    <partial name="_Alert" />
+}
 <div class="container-fluid px-4">
     <h1 class="mt-4">List user</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/user/index">Users</a></li>
         <li class="breadcrumb-item active">List user</li>
     </ol>
-    <div class="card mb-4">
+    <div class="card mb-12">
         <div class="card-header">
-            <a href="/user/create" class="btn btn-success">New user</a>
+            <a href="/user/create" class="btn btn-success">
+                <i class="fa fa-plus"></i>
+                New user
+            </a>
         </div>
         <div class="card-body">
             <div class="dataTable-wrapper">
@@ -29,8 +36,24 @@
                             </select> entries per page
                         </label>
                     </div>
+
                     <div class="dataTable-search">
-                        <input class="dataTable-input" placeholder="Search..." type="text">
+                        <form asp-action="index" method="get">
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="dataTable-input" value="@ViewBag.Keyword" placeholder="Search..." type="text" name="keyword">
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa fa-search"></i>
+                                            Search
+                                        </button>
+                                        <button class="btn btn-secondary" type="button" onclick="window.location.href='/user/index'">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="dataTable-container">
@@ -44,17 +67,15 @@
                                     <th>
                                         Username
                                     </th>
+
                                     <th>
-                                        Email
+                                        Position
                                     </th>
                                     <th>
-                                        Phone number
+                                        Status
                                     </th>
                                     <th>
-                                        Date of Birth
-                                    </th>
-                                    <th>
-                                        Control
+                                        Actions
                                     </th>
                                 </tr>
                             </thead>
@@ -69,36 +90,15 @@
                                             @Html.DisplayFor(modelItem => item.Username)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Email)
+                                            Admin
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                            <span class="badge bg-success">Active</span>
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Dob)
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                                            @Html.ActionLink("Details", "Details", new { id = item.Id })
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                                            <a data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Are you sure to delete user @Html.DisplayFor(modelItem => item.Username)?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                                                            <button type="button" class="btn btn-danger">Delete</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
                                         </td>
                                     </tr>
                                 }
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="dataTable-bottom">
-                    <div class="dataTable-info">Showing 1 to 10 of 57 entries</div>
+                    <div class="dataTable-info">Totals: @Model.TotalRecords users</div>
                     <div class="dataTable-pagination">
                         @await Component.InvokeAsync("Pager", Model)
                     </div>
@@ -116,3 +116,10 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $(".toast").toast('show');
+        }, 100);
+    </script>
+}

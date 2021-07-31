@@ -1,4 +1,5 @@
 using eShopSolution.AdminApp.Services;
+using eShopSolution.ViewModels.Catalog.Categories;
 using eShopSolution.ViewModels.System.Users;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -25,13 +26,16 @@ namespace eShopSolution.AdminApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>())
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AddOrEditValidator>());
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
             services.AddHttpContextAccessor();
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
+            services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddHttpClient();
             services.AddHttpClient("meta", c =>
             {
@@ -40,7 +44,7 @@ namespace eShopSolution.AdminApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
             {
-                options.LoginPath = "/login/index";
+                options.LoginPath = "/login/";
                 options.AccessDeniedPath = "/account/forbidden";
             });
             IMvcBuilder builder = services.AddRazorPages();
@@ -67,6 +71,7 @@ namespace eShopSolution.AdminApp
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseRouting();
@@ -75,6 +80,10 @@ namespace eShopSolution.AdminApp
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                     name: "MyArea",
+                     areaName: "admin",
+                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

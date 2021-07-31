@@ -13,7 +13,10 @@ namespace eShopSolution.ViewModels.System.Users
         public string Username { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        [Display(Name ="Date of birth")]
+
+        [Display(Name = "Date of birth")]
         public DateTime Dob { get; set; }
+
+        public IList<string> Roles { get; set; }
     }
 }

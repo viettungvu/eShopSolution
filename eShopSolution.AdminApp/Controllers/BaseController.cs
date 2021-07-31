@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -18,6 +14,37 @@ namespace eShopSolution.AdminApp.Controllers
             if (session == null)
                 context.Result = new RedirectToActionResult("Index", "Login", null);
             base.OnActionExecuted(context);
+        }
+
+        protected void SetAlert(string type, string message)
+        {
+            TempData["Message"] = message;
+            switch (type)
+            {
+                case "success":
+                    TempData["Type"] = "success";
+                    break;
+
+                case "warning":
+                    TempData["Type"] = "warning";
+                    break;
+
+                case "info":
+                    TempData["Type"] = "info";
+                    break;
+
+                case "danger":
+                    TempData["Type"] = "danger";
+                    break;
+
+                case "dark":
+                    TempData["Type"] = "dark";
+                    break;
+
+                default:
+                    TempData["Type"] = "primary";
+                    break;
+            }
         }
     }
 }

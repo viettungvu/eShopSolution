@@ -1,0 +1,52 @@
+﻿@model eShopSolution.ViewModels.Catalog.Categories.CategoryVm
+
+<div class="modal-header">
+    <h5 class="modal-title text-uppercase text-warning">Details: @Model.Name</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th class="col-3">@Html.DisplayNameFor(model => model.Id)</th>
+                <td class="col-9">@Html.DisplayFor(model => model.Id)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <td> @Html.DisplayFor(model => model.Name)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.SeoDescription)</th>
+                <td>@Html.DisplayFor(model => model.SeoDescription)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.SeoAlias)</th>
+                <td>@Html.DisplayFor(model => model.SeoAlias)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.SeoTitle)</th>
+                <td>@Html.DisplayFor(model => model.SeoTitle)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.LanguageId)</th>
+                <td>@Html.DisplayFor(model => model.LanguageId)</td>
+            </tr>
+
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.SortOrder)</th>
+                <td>@Html.DisplayFor(model => model.SortOrder)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.IsShowOnHome)</th>
+                <td>@Html.DisplayFor(model => model.IsShowOnHome)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Status)</th>
+                <td>@Html.DisplayFor(model => model.Status)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

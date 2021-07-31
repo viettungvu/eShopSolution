@@ -1,0 +1,55 @@
+﻿@model eShopSolution.ViewModels.System.Roles.RoleAssignRequest
+
+@{
+    ViewData["Title"] = "Role manager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $("#myToast").toast('show');
+        }, 100);
+    </script>
+}
+@{
+    <partial name="_Message" />
+}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Role Manage</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/user/index">Users</a></li>
+        <li class="breadcrumb-item active">Role Assign</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <a href="/user" class="btn btn-success">Back to list</a>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <h2>Role for user @Model.Id</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+
+                    <form asp-action="RoleAssign">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @for (int i = 0; i < Model.Roles.Count; i++)
+                        {
+                            <div class="form-check form-switch">
+                                <label class="form-check-label" asp-for="@Model.Roles[i].IsSelected">@Model.Roles[i].Name</label>
+                                <input class="form-check-input" type="checkbox" asp-for="Roles[i].IsSelected">
+                                <input type="hidden" asp-for="@Model.Roles[i].Id" />
+                                <input type="hidden" asp-for="@Model.Roles[i].Name" />
+                            </div>
+
+                        }
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

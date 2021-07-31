@@ -20,50 +20,62 @@ namespace eShopSolution.BackendApi.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpPost("new")]
-        public async Task<IActionResult> Create([FromForm] CategoryCreateRequest request)
+        [HttpPost()]
+        public async Task<IActionResult> Create([FromBody] CategoryCreateRequest request)
         {
-            var categoryId = await _categoryService.Create(request);
-            var category = await _categoryService.GetById(categoryId, request.LanguageId);
-            if (categoryId == 0)
-                return BadRequest($"Category {request.Name} is existed");
-            return Created(nameof(GetById), category);
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var result = await _categoryService.Create(request);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
 
-        [HttpPut("{categoryId}")]
-        public async Task<IActionResult> Update(int categoryId, [FromForm] CategoryUpdateRequest request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] CategoryUpdateRequest request)
         {
-            var category = await _categoryService.Update(categoryId, request);
-            if (!category)
-                return BadRequest("Failed");
-            return Ok();
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var result = await _categoryService.Update(id, request);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpDelete("{categoryId}")]
         public async Task<IActionResult> Delete(int categoryId)
         {
             var result = await _categoryService.Delete(categoryId);
-            if (!result)
-                return BadRequest("Failed");
-            return Ok();
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
 
-        [HttpGet("{categoryId}/{languageId}")]
-        public async Task<IActionResult> GetById(int categoryId, string languageId)
+        [HttpGet("{categoryId}")]
+        public async Task<IActionResult> GetById(int categoryId)
         {
-            var categoryVm = await _categoryService.GetById(categoryId, languageId);
-            if (categoryVm == null)
+            var result = await _categoryService.GetById(categoryId);
+            if (!result.IsSuccessed)
                 return NotFound("Not found");
-            return Ok(categoryVm);
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var categoryVm = await _categoryService.GetAll();
-            if (categoryVm == null)
-                return NotFound("List empty");
-            return Ok(categoryVm);
+            var result = await _categoryService.GetAll();
+            if (!result.IsSuccessed)
+                return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] CategoryPagingRequest request)
+        {
+            var result = await _categoryService.GetAllPaging(request);
+            if (!result.IsSuccessed)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

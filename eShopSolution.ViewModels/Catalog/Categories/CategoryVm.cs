@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShopSolution.ViewModels.Catalog.Categories
 {
-    public class CategoryViewModel
+    public class CategoryVm
     {
         public int Id { get; set; }
         public string Name { set; get; }

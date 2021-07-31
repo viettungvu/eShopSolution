@@ -19,7 +19,6 @@ namespace eShopSolution.Application.Catalog.Products
     {
         private readonly EShopDbContext _context;
         private readonly IStorageService _storageService;
-        private string USER_CONTENT_FOLDER_NAME = "user-content";
 
         public ProductService(EShopDbContext context, IStorageService storageService)
         {
@@ -27,19 +26,11 @@ namespace eShopSolution.Application.Catalog.Products
             _storageService = storageService;
         }
 
-        private async Task<string> SaveFile(IFormFile file)
-        {
-            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
-        }
-
-        public async Task<int> Create(ProductCreateRequest request)
+        public async Task<ApiResult<bool>> Create(ProductCreateRequest request)
         {
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.Name == request.Name);
             if (productTranslation != null)
-                throw new EShopException($"Product {request.Name} existed");
+                return new ApiErrorResult<bool>("Sản phẩm đã tồn tại");
             var newProduct = new Product()
             {
                 Price = request.Price,
@@ -78,67 +69,79 @@ namespace eShopSolution.Application.Catalog.Products
                             SortOrder = 1,
                             DateCreated = DateTime.Now,
                             IsDefault = true,
-                            Path = await this.SaveFile(request.ThumbnailImage),
+                            Path = await _storageService.UploadFileAsync(request.ThumbnailImage),
                             FileSize = request.ThumbnailImage.Length
                         }
                     };
             }
             _context.Products.Add(newProduct);
-            await _context.SaveChangesAsync();
-            return newProduct.Id;
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể tạo mới sản phẩm");
         }
 
-        public async Task<int> Update(int productId, ProductUpdateRequest request)
+        public async Task<ApiResult<bool>> Update(int productId, ProductUpdateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
-            var productTranslations = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == request.LanguageId);
-            if (product == null || productTranslations == null)
-                throw new EShopException($"Cant find a product {productId}");
-            productTranslations.Name = request.Name;
-            productTranslations.Description = request.Description;
-            productTranslations.Details = request.Details;
-            productTranslations.SeoDescription = request.SeoDescription;
-            productTranslations.SeoAlias = request.SeoAlias;
-            productTranslations.SeoTitle = request.SeoTitle;
-            productTranslations.LanguageId = request.LanguageId;
-            await _context.SaveChangesAsync();
-            return product.Id;
+            var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == request.LanguageId);
+            if (product == null || productTranslation == null)
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
+            productTranslation.Name = request.Name;
+            productTranslation.Description = request.Description;
+            productTranslation.Details = request.Details;
+            productTranslation.SeoDescription = request.SeoDescription;
+            productTranslation.SeoAlias = request.SeoAlias;
+            productTranslation.SeoTitle = request.SeoTitle;
+            productTranslation.LanguageId = request.LanguageId;
+            _context.Update(productTranslation);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể cập nhật sản phẩm");
         }
 
-        public async Task<int> UpdatePrice(int productId, decimal newPrice)
+        public async Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EShopException($"Not found {productId}");
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
             product.Price = newPrice;
-            return await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể cập nhật giá sản phẩm");
         }
 
-        public async Task<int> UpdateStock(int productId, int addedStock)
+        public async Task<ApiResult<bool>> UpdateStock(int productId, int addedStock)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EShopException($"Product not found {productId}'");
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
             product.Stock += addedStock;
-            return await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể cập nhật giá sản phẩm");
         }
 
-        public async Task<bool> UpdateViewCount(int productId)
+        public async Task<ApiResult<bool>> UpdateViewCount(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-                throw new EShopException($"Product not found {productId}");
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
             product.ViewCount += 1;
-            return await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể cập nhật sản phẩm");
         }
 
-        public async Task<int> Delete(int productId)
+        public async Task<ApiResult<bool>> Delete(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
-            {
-                throw new EShopException($"Failed to delete with error: 'Cannot find a product {productId}'");
-            }
+                return new ApiErrorResult<bool>("Sản phẩm không tồn tại");
             var productTranslation = _context.ProductTranslations.FirstOrDefault(x => x.ProductId == product.Id);
             _context.ProductTranslations.Remove(productTranslation);
             var image = _context.ProductImages.Where(x => x.ProductId == productId);
@@ -148,10 +151,13 @@ namespace eShopSolution.Application.Catalog.Products
                 await _storageService.DeleteFileAsync(img.Path);
             }
             _context.Products.Remove(product);
-            return await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể xóa sản phẩm");
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetAllPaging(string languageId, ProductPagingRequest request)
+        public async Task<ApiResult<PagedResult<ProductVm>>> GetAllPaging(string languageId, ProductPagingRequest request)
         {
             //1. Select
             var query = from p in _context.Products
@@ -169,15 +175,11 @@ namespace eShopSolution.Application.Catalog.Products
             {
                 query = query.Where(p => languageId == p.pt.LanguageId);
             }
-            if (request.CategoryId != null)
-            {
-                query = query.Where(p => request.CategoryId == p.pic.CategoryID);
-            }
             //3 Paging
             int totalRow = await query.CountAsync();
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new ProductViewModel()
+                .Select(x => new ProductVm()
                 {
                     Id = x.p.Id,
                     Name = x.pt.Name,
@@ -194,15 +196,19 @@ namespace eShopSolution.Application.Catalog.Products
                     ThumbnailImage = x.pi.Path
                 }).ToListAsync();
             //4. Select
-            var pagedResult = new PagedResult<ProductViewModel>()
+            var pagedResult = new PagedResult<ProductVm>()
             {
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 TotalRecords = totalRow,
                 ListItems = await data
             };
-            return pagedResult;
+            if (data != null)
+                return new ApiSuccessResult<PagedResult<ProductVm>>(pagedResult);
+            return new ApiErrorResult<PagedResult<ProductVm>>("null");
         }
 
-        public async Task<List<ProductViewModel>> GetLatestProduct(string languageId, int take)
+        public async Task<ApiResult<List<ProductVm>>> GetLatestProduct(string languageId, int take)
         {
             //1. Select
             var query = from p in _context.Products
@@ -217,8 +223,8 @@ namespace eShopSolution.Application.Catalog.Products
                         where pt.LanguageId == languageId && (pi == null || pi.IsDefault == true)
                         select new { p, pt, pic, pi };
 
-            var data = query.OrderByDescending(x => x.p.DateCreated).Take(take)
-                .Select(x => new ProductViewModel()
+            var data = await query.OrderByDescending(x => x.p.DateCreated).Take(take)
+                .Select(x => new ProductVm()
                 {
                     Id = x.p.Id,
                     Name = x.pt.Name,
@@ -235,21 +241,25 @@ namespace eShopSolution.Application.Catalog.Products
                     ViewCount = x.p.ViewCount,
                     ThumbnailImage = x.pi.Path
                 }).ToListAsync();
-            return await data;
+            if (data != null)
+                return new ApiSuccessResult<List<ProductVm>>(data);
+            return new ApiErrorResult<List<ProductVm>>("null");
         }
 
-        public async Task<ProductViewModel> GetById(int productId, string languageId)
+        public async Task<ApiResult<ProductVm>> GetById(int productId, string languageId = "vi-vn")
         {
             var query = from p in _context.Products
                         join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                        //join pic in _context.ProductInCategories on p.Id equals pic.ProductID
+                        //join c in _context.Categories on pic.CategoryID equals c.Id
                         join pi in _context.ProductImages on p.Id equals pi.ProductId
                         select new { p, pt, pi };
-            if (query == null)
-                throw new EShopException($"Product not found {productId}");
-            if (languageId != null)
-                query = query.Where(x => x.p.Id == productId);
-            query = query.Where(x => x.pt.LanguageId == languageId);
-            var data = query.Select(x => new ProductViewModel()
+            query = query.Where(x => x.p.Id == productId);
+            if (!string.IsNullOrEmpty(languageId))
+                query = query.Where(x => x.pt.LanguageId == languageId);
+            if (query.Count() <= 0)
+                return new ApiErrorResult<ProductVm>("Sản phẩm không tồn tại");
+            var data = await query.Select(x => new ProductVm()
             {
                 Id = x.p.Id,
                 Description = x.pt.Description,
@@ -266,10 +276,12 @@ namespace eShopSolution.Application.Catalog.Products
                 ViewCount = x.p.ViewCount,
                 Name = x.pt.Name,
             }).FirstOrDefaultAsync();
-            return await data;
+            if (data != null)
+                return new ApiSuccessResult<ProductVm>(data);
+            return new ApiErrorResult<ProductVm>("null");
         }
 
-        public async Task<PagedResult<ProductViewModel>> GetByCategoryId(string lanugageId, ProductPagingRequest request)
+        public async Task<ApiResult<PagedResult<ProductVm>>> GetByCategoryId(int categoryId, ProductPagingRequest request)
         {
             //1. Select
             var query = from p in _context.Products
@@ -278,19 +290,19 @@ namespace eShopSolution.Application.Catalog.Products
                         join c in _context.Categories on pic.CategoryID equals c.Id
                         select new { p, pt, pic };
             //2. Filter
-            if (request.CategoryId.HasValue && request.CategoryId.Value > 0)
+            if (categoryId > 0)
             {
-                query = query.Where(p => p.pic.CategoryID == request.CategoryId);
+                query = query.Where(p => p.pic.CategoryID == categoryId);
             }
-            if (lanugageId != null)
-            {
-                query = query.Where(p => p.pt.LanguageId == lanugageId);
-            }
+            //if (lanugageId != null)
+            //{
+            //    query = query.Where(p => p.pt.LanguageId == lanugageId);
+            //}
             //3 Paging
             int totalRow = await query.CountAsync();
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(x => new ProductViewModel()
+                .Select(x => new ProductVm()
                 {
                     Id = x.p.Id,
                     Name = x.pt.Name,
@@ -306,43 +318,17 @@ namespace eShopSolution.Application.Catalog.Products
                     LanguageId = x.pt.LanguageId,
                 }).ToListAsync();
             //4. Select
-            var pagedResult = new PagedResult<ProductViewModel>()
+            var pagedResult = new PagedResult<ProductVm>()
             {
                 TotalRecords = totalRow,
                 ListItems = await data
             };
-            return pagedResult;
+            if (data != null)
+                return new ApiSuccessResult<PagedResult<ProductVm>>(pagedResult);
+            return new ApiErrorResult<PagedResult<ProductVm>>("null");
         }
 
-        //public async Task<List<ProductViewModel>> GetAll()
-        //{
-        //    var query = from p in _context.Products
-        //                join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-        //                join pic in _context.ProductInCategories on p.Id equals pic.ProductID
-        //                join c in _context.Categories on pic.CategoryID equals c.Id
-        //                join pi in _context.ProductImages on p.Id equals pi.ProductId
-        //                select new { p, pt, pic, pi };
-        //    var data = await query.Select(x => new ProductViewModel()
-        //    {
-        //        Id = x.p.Id,
-        //        Name = x.pt.Name,
-        //        Description = x.pt.Description,
-        //        Details = x.pt.Details,
-        //        SeoAlias = x.pt.SeoAlias,
-        //        SeoTitle = x.pt.SeoTitle,
-        //        SeoDescription = x.pt.SeoDescription,
-        //        Stock = x.p.Stock,
-        //        Price = x.p.Price,
-        //        OriginalPrice = x.p.OriginalPrice,
-        //        ViewCount = x.p.ViewCount,
-        //        LanguageId = x.pt.LanguageId,
-        //        ThumbnailImage = x.pi.Path
-        //    }).ToListAsync();
-        //    return data;
-        //}
-
-        //Image APIs
-        public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
+        public async Task<ApiResult<bool>> AddImage(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
@@ -357,47 +343,53 @@ namespace eShopSolution.Application.Catalog.Products
             };
             if (request.ImageFile != null)
             {
-                newImage.Path = await this.SaveFile(request.ImageFile);
+                newImage.Path = await _storageService.UploadFileAsync(request.ImageFile);
                 newImage.FileSize = request.ImageFile.Length;
             }
             _context.ProductImages.Add(newImage);
-            await _context.SaveChangesAsync();
-            return newImage.Id;
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể thêm hình ảnh cho sản phẩm");
         }
 
-        public async Task<bool> UpdateImage(int imageId, ProductImageUpdateRequest request)
+        public async Task<ApiResult<bool>> UpdateImage(int imageId, ProductImageUpdateRequest request)
         {
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
-                throw new EShopException($"Cannot find image {imageId}");
+                return new ApiErrorResult<bool>("không tìm thấy ảnh");
             if (request.ImageFile != null)
             {
                 image.Caption = request.Caption;
                 image.IsDefault = request.IsDefault;
                 image.FileSize = request.ImageFile.Length;
-                image.Path = await this.SaveFile(request.ImageFile);
+                image.Path = await _storageService.UploadFileAsync(request.ImageFile);
             }
             _context.ProductImages.Update(image);
-            return await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể cập nhật hình ảnh sản phẩm");
         }
 
-        public async Task<bool> RemoveImage(int productId, int imageId)
+        public async Task<ApiResult<bool>> RemoveImage(int productId, int imageId)
         {
             var image = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == productId && x.Id == imageId);
             if (image == null)
-                throw new EShopException($"Image not found {imageId}");
+                return new ApiErrorResult<bool>("Không tìm thấy ảnh");
             _context.ProductImages.Remove(image);
-            return await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+                return new ApiSuccessResult<bool>();
+            return new ApiErrorResult<bool>("Không thể xóa hình ảnh sản phẩm");
         }
 
-        public async Task<ProductImageViewModel> GetImageById(int imageId)
+        public async Task<ApiResult<ProductImageVm>> GetImageById(int imageId)
         {
             var image = await _context.ProductImages.FindAsync(imageId);
             if (image == null)
-            {
-                throw new EShopException($"Image not found {imageId}");
-            }
-            var productImageVm = new ProductImageViewModel()
+                return new ApiErrorResult<ProductImageVm>("Ảnh không tồn tại");
+            var productImageVm = new ProductImageVm()
             {
                 Id = image.Id,
                 Caption = image.Caption,
@@ -408,13 +400,13 @@ namespace eShopSolution.Application.Catalog.Products
                 SortOrder = image.SortOrder,
                 ProductId = image.ProductId
             };
-            return productImageVm;
+            return new ApiSuccessResult<ProductImageVm>(productImageVm);
         }
 
-        public async Task<List<ProductImageViewModel>> GetListImages(int productId)
+        public async Task<ApiResult<List<ProductImageVm>>> GetListImages(int productId)
         {
             var images = await _context.ProductImages.Where(x => x.ProductId == productId)
-                .Select(x => new ProductImageViewModel()
+                .Select(x => new ProductImageVm()
                 {
                     Caption = x.Caption,
                     DateCreated = x.DateCreated,
@@ -423,7 +415,7 @@ namespace eShopSolution.Application.Catalog.Products
                     SortOrder = x.SortOrder,
                     IsDefault = x.IsDefault
                 }).ToListAsync();
-            return images;
+            return new ApiSuccessResult<List<ProductImageVm>>(images);
         }
     }
 }

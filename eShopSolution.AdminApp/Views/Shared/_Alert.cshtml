@@ -1,0 +1,41 @@
+﻿@{
+    var alertType = TempData["Type"];
+    <div class="toast-container position-absolute bottom-0 end-0 p-3">
+        <div class="toast text-white bg-@alertType border-0" role="alert" style="z-index:999" data-bs-delay="3000">
+            <div class="d-flex align-items-center">
+                <div class="toast-body">
+                    @{
+                        switch (alertType)
+                        {
+                            case "success":
+                                <i class="fa fa-check-circle"></i>
+                                break;
+
+                            case "warning":
+                                <i class="fa fa-exclamation-circle"></i>
+                                break;
+
+                            case "info":
+                                <i class="fa fa-exlaimation-triangle"></i>
+                                break;
+
+                            case "danger":
+                                <i class="fa fa-bomb"></i>
+                                break;
+
+                            case "dark":
+                                <i class="fa fa-moon"></i>
+                                break;
+
+                            default:
+                                <i class="fa fa-moon"></i>
+                                break;
+                        }
+                    }
+                    <span class="toast-text">@TempData["Message"]</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,118 @@
+﻿@using eShopSolution.ViewModels.Common
+@model PagedResult<eShopSolution.ViewModels.System.Roles.RoleVm>
+
+@{
+    ViewData["Title"] = "Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $(".toast").toast('show');
+        }, 100);
+    </script>
+}
+@{
+    <partial name="_Alert" />
+}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Roles manage</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/role/">Roles</a></li>
+        <li class="breadcrumb-item active">List roles</li>
+    </ol>
+    <div class="card mb-12">
+        <div class="card-header">
+            <a href="/role/create" class="btn btn-success">
+                <i class="fa fa-plus"></i>
+                New role
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="dataTable-wrapper">
+                <div class="dataTable-top">
+                    <div class="dataTable-dropdown">
+                        <label>
+                            <select class="dataTable-selector">
+                                <option value="5" selected="">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select> entries per page
+                        </label>
+                    </div>
+
+                    <div class="dataTable-search">
+                        <form asp-action="index" method="get">
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="dataTable-input" value="@ViewBag.Keyword" placeholder="Search..." type="text" name="keyword">
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa fa-search"></i>
+                                            Search
+                                        </button>
+                                        <button class="btn btn-secondary" type="button" onclick="window.location.href='/role/'">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="dataTable-container">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                            @Html.ActionLink("Add user", "Details", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="dataTable-bottom">
+                    <div class="dataTable-info">Totals: @Model.TotalRecords roles</div>
+                    <div class="dataTable-pagination">
+                        @await Component.InvokeAsync("Pager", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

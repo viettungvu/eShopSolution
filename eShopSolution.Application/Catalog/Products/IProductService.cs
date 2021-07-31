@@ -8,36 +8,34 @@ namespace eShopSolution.Application.Catalog.Products
 {
     public interface IProductService
     {
-        Task<int> Create(ProductCreateRequest request);
+        Task<ApiResult<bool>> Create(ProductCreateRequest request);
 
-        Task<int> Update(int productId, ProductUpdateRequest request);
+        Task<ApiResult<bool>> Update(int productId, ProductUpdateRequest request);
 
-        Task<int> Delete(int productId);
+        Task<ApiResult<bool>> Delete(int productId);
 
-        Task<int> UpdatePrice(int productId, decimal newPrice);
+        Task<ApiResult<bool>> UpdatePrice(int productId, decimal newPrice);
 
-        Task<int> UpdateStock(int productId, int stock);
+        Task<ApiResult<bool>> UpdateStock(int productId, int stock);
 
-        Task<bool> UpdateViewCount(int productId);
+        Task<ApiResult<bool>> UpdateViewCount(int productId);
 
-        Task<ProductViewModel> GetById(int productId, string languageId);
+        Task<ApiResult<ProductVm>> GetById(int productId, string languageId);
 
-        Task<PagedResult<ProductViewModel>> GetAllPaging(string languageId, ProductPagingRequest request);
+        Task<ApiResult<PagedResult<ProductVm>>> GetAllPaging(string languageId, ProductPagingRequest request);
 
-        //Task<List<ProductViewModel>> GetAll();
+        Task<ApiResult<List<ProductVm>>> GetLatestProduct(string languageId, int take);
 
-        Task<List<ProductViewModel>> GetLatestProduct(string languageId, int take);
+        Task<ApiResult<PagedResult<ProductVm>>> GetByCategoryId(int categoryId, ProductPagingRequest request);
 
-        Task<PagedResult<ProductViewModel>> GetByCategoryId(string languageId, ProductPagingRequest request);
+        Task<ApiResult<bool>> AddImage(int productId, ProductImageCreateRequest request);
 
-        Task<int> AddImage(int productId, ProductImageCreateRequest request);
+        Task<ApiResult<bool>> UpdateImage(int imageId, ProductImageUpdateRequest request);
 
-        Task<bool> UpdateImage(int imageId, ProductImageUpdateRequest request);
+        Task<ApiResult<bool>> RemoveImage(int productId, int imageId);
 
-        Task<bool> RemoveImage(int productId, int imageId);
+        Task<ApiResult<ProductImageVm>> GetImageById(int imageId);
 
-        Task<ProductImageViewModel> GetImageById(int imageId);
-
-        Task<List<ProductImageViewModel>> GetListImages(int productId);
+        Task<ApiResult<List<ProductImageVm>>> GetListImages(int productId);
     }
 }

@@ -16,48 +16,52 @@
             <a href="/user/index" class="btn btn-success">Back to list</a>
         </div>
         <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Firstname)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Firstname)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Lastname)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Lastname)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Username)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Username)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.PhoneNumber)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Dob)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Dob)
-                </dd>
-            </dl>
-            <dl class="row">
-                @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-                @Html.ActionLink("Delete", "Delete", new { id = Model.Id })
-            </dl>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <td>
+                        <dl class="row">
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Firstname)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Firstname)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Lastname)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Lastname)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Username)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Username)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Email)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.PhoneNumber)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.PhoneNumber)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Dob)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Dob)
+                            </dd>
+                        </dl>
+                    </td>
+                </tr>
+            </table>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class="btn btn-primary"})
+                @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
         </div>
     </div>
 </div>

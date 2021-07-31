@@ -1,10 +1,10 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:54859",
-      "sslPort": 44358
+      "applicationUrl": "http://localhost:57253/",
+      "sslPort": 44370
     }
   },
   "profiles": {
@@ -17,12 +17,12 @@
     },
     "eShopSolution.AdminApp": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5002/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:5002/"
     }
   }
 }

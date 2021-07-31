@@ -6,7 +6,7 @@ namespace eShopSolution.ViewModels.Common
 {
     public class ApiErrorResult<T> : ApiResult<T>
     {
-        public string[] ValidationErrors { get; set; }
+        public List<string> ValidationErrors { get; set; }
 
         public ApiErrorResult()
         {
@@ -19,7 +19,7 @@ namespace eShopSolution.ViewModels.Common
             Message = message;
         }
 
-        public ApiErrorResult(string[] validationErrors)
+        public ApiErrorResult(List<string> validationErrors)
         {
             IsSuccessed = false;
             ValidationErrors = validationErrors;

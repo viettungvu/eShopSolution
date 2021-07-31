@@ -1,0 +1,17 @@
+﻿@using eShopSolution.ViewModels.Catalog.Categories
+@model CategoryDeleteRequest
+
+<div class="modal-header">
+    <h4 class="modal-title text-danger text-uppercase">Delete</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <span class="">Delete category @Model.Id?</span>
+</div>
+<div class="modal-footer">
+    <form asp-action="Delete">
+        <input type="hidden" name="Id" value="@Model.Id" id="hidden" />
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
+        <button id="deleteBtn" type="submit" class="btn btn-danger" data-save="modal">Delete</button>
+    </form>
+</div>

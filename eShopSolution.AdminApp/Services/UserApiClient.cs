@@ -1,4 +1,5 @@
 ﻿using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.System.Roles;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -88,6 +89,19 @@ namespace eShopSolution.AdminApp.Services
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<UserVm>>(await response.Content.ReadAsStringAsync());
             return JsonConvert.DeserializeObject<ApiErrorResult<UserVm>>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpClient client = _httpClientFactory.CreateClient("meta");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            HttpResponseMessage response = await client.PutAsync($"users/{id}", httpContent);
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSuccessResult<bool>>(await response.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(await response.Content.ReadAsStringAsync());
         }
     }
 }
